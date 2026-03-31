@@ -15,10 +15,8 @@ function VerifyForm() {
 
     try {
       const contract = await getContract();
-      // В ethers v6 certId трябва да е валиден bytes32 низ (започващ с 0x)
       const data = await contract.verifyCertificate(certId);
       
-      // В ethers v6 обектите често връщат именувани свойства директно
       setResult({
         name: data[0],
         course: data[1],
