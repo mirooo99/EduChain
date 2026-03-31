@@ -34,7 +34,7 @@ function VerifyForm() {
   return (
     <div style={{ padding: '20px', backgroundColor: 'white', borderRadius: '8px' }}>
       <h2>Проверка на автентичност</h2>
-      <p style={{ fontSize: '0.9em', color: '#666' }}>Въведете уникалния хеш код, за да потвърдите данните в блокчейна на Sepolia.</p>
+      <p style={{ fontSize: '0.9em', color: '#666' }}>Въведете уникалния хеш код, за да потвърдите данните в блокчейна на Sepolia. За тест използвайте 0x3db274d438e163be6ba02f700b60b577b0dff2e11e154554d2db81c69b3074a0</p>
       
       <form onSubmit={handleVerify} style={{ display: 'flex', flexDirection: 'column' }}>
         <input 
