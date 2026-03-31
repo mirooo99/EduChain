@@ -6,11 +6,11 @@ function IssueForm() {
   const [course, setCourse] = useState('');
   const [date, setDate] = useState('');
   const [status, setStatus] = useState('');
-  const [certHash, setCertHash] = useState(''); // Нова променлива за хеша
+  const [certHash, setCertHash] = useState('');
 
   const handleIssue = async (e) => {
     e.preventDefault();
-    setCertHash(''); // Изчистваме стария хеш
+    setCertHash('');
     try {
       setStatus('Свързване с MetaMask...');
       const contract = await getContract();
@@ -21,10 +21,8 @@ function IssueForm() {
       setStatus('Транзакцията се обработва в Sepolia... (около 15 сек.)');
       const receipt = await tx.wait();
       
-      // Взимаме ID-то на сертификата от лога на транзакцията
-      // В ethers v6 това става чрез receipt.logs
       const event = receipt.logs[0]; 
-      const id = event.topics[1]; // Първият индексиран аргумент (certId)
+      const id = event.topics[1];
       
       setCertHash(id);
       setStatus('✅ Успешно записано в блокчейна!');
