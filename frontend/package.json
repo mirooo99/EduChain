@@ -1,6 +1,5 @@
 {
   "name": "educhain-frontend",
-  "homepage": "https://mirooo99.github.io/EduChain",
   "version": "1.0.0",
   "private": true,
   "dependencies": {
