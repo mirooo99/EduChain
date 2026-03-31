@@ -1,0 +1,70 @@
+import React, { useState } from 'react';
+import { getContract } from '../utils/ethersHelper';
+
+function VerifyForm() {
+  const [certId, setCertId] = useState('');
+  const [result, setResult] = useState(null);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleVerify = async (e) => {
+    e.preventDefault();
+    setError('');
+    setResult(null);
+    setLoading(true);
+
+    try {
+      const contract = await getContract();
+      // В ethers v6 certId трябва да е валиден bytes32 низ (започващ с 0x)
+      const data = await contract.verifyCertificate(certId);
+      
+      // В ethers v6 обектите често връщат именувани свойства директно
+      setResult({
+        name: data[0],
+        course: data[1],
+        date: data[2],
+        isValid: data[3]
+      });
+    } catch (err) {
+      console.error(err);
+      setError('❌ Сертификатът не е намерен. Проверете дали Hash ID е правилен.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div style={{ padding: '20px', backgroundColor: 'white', borderRadius: '8px' }}>
+      <h2>Проверка на автентичност</h2>
+      <p style={{ fontSize: '0.9em', color: '#666' }}>Въведете уникалния хеш код, за да потвърдите данните в блокчейна на Sepolia.</p>
+      
+      <form onSubmit={handleVerify} style={{ display: 'flex', flexDirection: 'column' }}>
+        <input 
+          type="text" 
+          placeholder="0x..." 
+          value={certId} 
+          onChange={(e) => setCertId(e.target.value)} 
+          required 
+        />
+        <button type="submit" disabled={loading}>
+          {loading ? 'Проверка...' : 'Провери'}
+        </button>
+      </form>
+      
+      {error && <p style={{ color: 'red', marginTop: '10px' }}>{error}</p>}
+      
+      {result && result.isValid && (
+        <div style={{ marginTop: '20px', padding: '15px', border: '2px solid #28a745', borderRadius: '5px', backgroundColor: '#f8fff9' }}>
+          <h3 style={{ color: '#28a745', marginTop: 0 }}>✅ Валиден Сертификат!</h3>
+          <p><strong>Ученик:</strong> {result.name}</p>
+          <p><strong>Постижение:</strong> {result.course}</p>
+          <p><strong>Дата на издаване:</strong> {result.date}</p>
+          <hr />
+          <small style={{ color: '#666' }}>Данните са извлечени директно от Smart Contract в Sepolia Testnet.</small>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default VerifyForm;
