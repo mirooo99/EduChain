@@ -1,5 +1,8 @@
 # EduChain - Decentralized Academic Credentials
 
+## 🖥️ Live Demo
+For Live Demo visit: https://educhain-five.vercel.app/
+
 ## 🎓 Overview
 EduChain is a decentralized application (dApp) designed to issue and verify academic certificates for TUES Fest 2026. By using Ethereum Smart Contracts, we ensure that credentials are tamper-proof and permanently verifiable.
 
