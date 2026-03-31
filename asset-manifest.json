@@ -1,0 +1,10 @@
+{
+  "files": {
+    "main.js": "/EduChain/static/js/main.f4cd1e44.js",
+    "index.html": "/EduChain/index.html",
+    "main.f4cd1e44.js.map": "/EduChain/static/js/main.f4cd1e44.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.f4cd1e44.js"
+  ]
+}

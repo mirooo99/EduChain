@@ -1,0 +1,12 @@
+# Node
+node_modules/
+.npm/
+
+# Hardhat
+cache/
+artifacts/
+
+# Frontend
+frontend/node_modules/
+frontend/build/
+.env
