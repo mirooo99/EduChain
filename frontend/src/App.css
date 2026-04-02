@@ -1,83 +1,68 @@
 body {
   margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  color: #333;
+  color: #2c3e50;
 }
 
-.app-container {
-  max-width: 900px;
-  width: 100%;
-  margin: 40px 20px;
-  text-align: center;
+.container {
+  max-width: 850px;
+  margin: 50px auto;
+  padding: 0 20px;
 }
 
-.card {
+.main-card {
   background: white;
   padding: 40px;
-  border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-  margin-top: 20px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  border: 1px solid #e1e8f0;
 }
 
-h1 { color: #2c3e50; font-size: 2.5rem; margin-bottom: 10px; }
-h2 { color: #34495e; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
-
-.nav-buttons {
+.nav-container {
+  text-align: center;
   margin-bottom: 30px;
   display: flex;
   justify-content: center;
-  gap: 10px;
+  gap: 15px;
 }
 
-.nav-btn {
-  padding: 12px 25px;
+.nav-button {
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 600;
   border: none;
-  border-radius: 25px;
+  border-radius: 10px;
   cursor: pointer;
-  font-weight: bold;
-  transition: 0.3s;
-  background: #ecf0f1;
-  color: #7f8c8d;
+  transition: all 0.3s ease;
+  background-color: #ffffff;
+  color: #5a67d8;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-.nav-btn.active {
-  background: #007bff;
+.nav-button.active {
+  background-color: #5a67d8;
   color: white;
-  box-shadow: 0 4px 15px rgba(0,123,255,0.3);
+  box-shadow: 0 4px 12px rgba(90, 103, 216, 0.3);
 }
 
-input {
+input[type="text"], input[type="date"] {
   width: 100%;
-  padding: 12px;
-  margin: 10px 0;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-sizing: border-box; /* Важно за размерите */
-}
-
-button[type="submit"], .main-btn {
-  width: 100%;
-  padding: 15px;
-  background: #28a745;
-  color: white;
-  border: none;
+  padding: 12px 15px;
+  margin: 10px 0 20px 0;
+  border: 2px solid #edf2f7;
   border-radius: 8px;
   font-size: 1rem;
-  font-weight: bold;
-  cursor: pointer;
-  margin-top: 10px;
+  box-sizing: border-box;
 }
 
-button:hover { opacity: 0.9; transform: translateY(-1px); }
-
-.status-box {
-  margin-top: 20px;
-  padding: 15px;
+button[type="submit"], .action-btn {
+  width: 100%;
+  padding: 14px;
   border-radius: 8px;
-  background: #f8f9fa;
-  border-left: 5px solid #007bff;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  transition: opacity 0.2s;
 }
