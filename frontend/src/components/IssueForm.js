@@ -2,18 +2,14 @@ import React, { useState } from 'react';
 import { getContract } from '../utils/ethersHelper';
 
 function IssueForm() {
-  // Стeйтове за издаване
   const [name, setName] = useState('');
   const [course, setCourse] = useState('');
   const [date, setDate] = useState('');
   const [status, setStatus] = useState('');
   const [certHash, setCertHash] = useState('');
-
-  // Стейтове за анулиране и роли
   const [revokeId, setRevokeId] = useState('');
   const [newAdminAddr, setNewAdminAddr] = useState('');
 
-  // 1. Функция за Издаване
   const handleIssue = async (e) => {
     e.preventDefault();
     setCertHash('');
@@ -28,7 +24,7 @@ function IssueForm() {
       const receipt = await tx.wait();
       
       const event = receipt.logs[0]; 
-      const id = event.topics[1]; // Взимаме хеша както преди
+      const id = event.topics[1];
       
       setCertHash(id);
       setStatus('✅ Успешно записано в блокчейна!');
@@ -38,7 +34,6 @@ function IssueForm() {
     }
   };
 
-  // 2. Функция за Анулиране
   const handleRevoke = async () => {
     if (!revokeId) return;
     try {
@@ -54,7 +49,6 @@ function IssueForm() {
     }
   };
 
-  // 3. Функция за Добавяне/Премахване на Админ
   const handleRole = async (action) => {
     if (!newAdminAddr) return;
     try {
