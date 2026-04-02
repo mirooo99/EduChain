@@ -2,7 +2,6 @@
 pragma solidity ^0.8.19;
 
 contract Certificate {
-    // Дефинираме двете роли
     mapping(address => bool) public isSuperAdmin;
     mapping(address => bool) public isAdmin;
 
@@ -16,7 +15,7 @@ contract Certificate {
     mapping(bytes32 => CertDetails) public certificates;
 
     event CertificateIssued(bytes32 indexed certId, string studentName, string courseName);
-    event CertificateRevoked(bytes32 indexed certId); // Ново събитие за анулиране
+    event CertificateRevoked(bytes32 indexed certId);
 
     modifier onlySuperAdmin() {
         require(isSuperAdmin[msg.sender], "Access denied: SuperAdmin only");
@@ -29,12 +28,10 @@ contract Certificate {
     }
 
     constructor() {
-        // Деплойърът става и двете, за да имаш пълни права от самото начало
         isSuperAdmin[msg.sender] = true;
         isAdmin[msg.sender] = true;
     }
 
-    // --- УПРАВЛЕНИЕ НА РОЛИ ---
     function addAdmin(address _addr) public onlySuperAdmin {
         isAdmin[_addr] = true;
     }
@@ -43,7 +40,6 @@ contract Certificate {
         isAdmin[_addr] = false;
     }
 
-    // --- ИЗДАВАНЕ И АНУЛИРАНЕ ---
     function issueCertificate(
         string memory _studentName,
         string memory _courseName,
@@ -66,11 +62,9 @@ contract Certificate {
         emit CertificateRevoked(_certId);
     }
 
-    // --- ПРОВЕРКА ---
     function verifyCertificate(bytes32 _certId) public view returns (string memory, string memory, string memory, bool) {
         CertDetails memory cert = certificates[_certId];
         require(bytes(cert.studentName).length > 0, "Certificate not found");
-        // Вече не гърми, ако е невалиден. Просто връща isValid = false.
         return (cert.studentName, cert.courseName, cert.date, cert.isValid);
     }
 }
