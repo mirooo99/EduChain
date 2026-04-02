@@ -17,35 +17,27 @@ function IssueForm() {
       setStatus('Свързване с MetaMask...');
       const contract = await getContract();
       
-      setStatus('Моля, потвърдете транзакцията в MetaMask...');
+      setStatus('Моля, потвърдете транзакцията...');
       const tx = await contract.issueCertificate(name, course, date);
       
-      setStatus('Транзакцията се обработва в Sepolia... (около 15 сек.)');
+      setStatus('Транзакцията се обработва (около 15 сек.)...');
       const receipt = await tx.wait();
       
-      const event = receipt.logs[0]; 
-      const id = event.topics[1];
-      
-      setCertHash(id);
-      setStatus('✅ Успешно записано в блокчейна!');
-    } catch (error) {
-      console.error(error);
-      setStatus('❌ Грешка при издаването. Проверете дали сте Админ.');
-    }
-  };
+      // Правилният начин за взимане на ID в ethers v6
+      const log = receipt.logs.find(l => {
+        try {
+          return contract.interface.parseLog(l).name === "CertificateIssued";
+        } catch (e) { return false; }
+      });
 
-  const handleRevoke = async () => {
-    if (!revokeId) return;
-    try {
-      setStatus('Искане за анулиране...');
-      const contract = await getContract();
-      const tx = await contract.revokeCertificate(revokeId);
-      setStatus('Обработка на анулирането...');
-      await tx.wait();
-      setStatus('⚠️ Сертификатът е успешно анулиран!');
+      if (log) {
+        const parsedLog = contract.interface.parseLog(log);
+        setCertHash(parsedLog.args[0]); // certId
+        setStatus('✅ Успешно издаден сертификат!');
+      }
     } catch (error) {
       console.error(error);
-      setStatus('❌ Грешка при анулиране (Може би вече е анулиран или нямате права).');
+      setStatus('❌ Грешка. Уверете се, че сте Админ и имате Sepolia ETH.');
     }
   };
 
@@ -54,65 +46,66 @@ function IssueForm() {
     try {
       setStatus('Промяна на права...');
       const contract = await getContract();
-      let tx;
-      if (action === 'add') tx = await contract.addAdmin(newAdminAddr);
-      if (action === 'remove') tx = await contract.removeAdmin(newAdminAddr);
+      let tx = (action === 'add') 
+        ? await contract.addAdmin(newAdminAddr) 
+        : await contract.removeAdmin(newAdminAddr);
+      
       await tx.wait();
-      setStatus('✅ Правата са обновени успешно!');
+      setStatus('✅ Списъкът с админи е обновен!');
     } catch (error) {
       console.error(error);
-      setStatus('❌ Грешка: Само SuperAdmin може да променя права.');
+      setStatus('❌ Грешка: Само съществуващ Админ може да добавя други.');
+    }
+  };
+
+  const handleRevoke = async () => {
+    if (!revokeId) return;
+    try {
+      setStatus('Анулиране...');
+      const contract = await getContract();
+      const tx = await contract.revokeCertificate(revokeId);
+      await tx.wait();
+      setStatus('⚠️ Сертификатът е анулиран успешно!');
+    } catch (error) {
+      setStatus('❌ Грешка при анулиране.');
     }
   };
 
   return (
-    <div style={{ padding: '20px', backgroundColor: 'white', borderRadius: '8px', display: 'flex', flexDirection: 'column', gap: '30px' }}>
-      
+    <div style={{ padding: '20px', backgroundColor: 'white', borderRadius: '8px', display: 'flex', flexDirection: 'column', gap: '25px' }}>
       <section>
-        <h2>Издаване на нов сертификат</h2>
-        <form onSubmit={handleIssue} style={{ display: 'flex', flexDirection: 'column' }}>
+        <h2>Издаване на сертификат</h2>
+        <form onSubmit={handleIssue} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
           <input type="text" placeholder="Име на ученик" value={name} onChange={(e) => setName(e.target.value)} required />
-          <input type="text" placeholder="Постижение (напр. Hack TUES Winner)" value={course} onChange={(e) => setCourse(e.target.value)} required />
+          <input type="text" placeholder="Курс / Постижение" value={course} onChange={(e) => setCourse(e.target.value)} required />
           <input type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
-          <button type="submit">Издай в Блокчейна</button>
+          <button type="submit" style={{ backgroundColor: '#007bff', color: 'white', padding: '10px' }}>Издай</button>
         </form>
-
         {certHash && (
           <div style={{ marginTop: '15px', padding: '10px', background: '#eef', border: '1px dashed #333' }}>
-            <p style={{ margin: '0 0 5px 0' }}><strong>Certificate ID (Копирайте това):</strong></p>
-            <code style={{ wordBreak: 'break-all', fontSize: '14px' }}>{certHash}</code>
+            <strong>ID за проверка:</strong> <code style={{ wordBreak: 'break-all' }}>{certHash}</code>
           </div>
         )}
       </section>
 
-      <hr style={{ width: '100%', border: '1px solid #eee' }} />
+      <hr />
 
       <section>
-        <h2>Анулиране на сертификат</h2>
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <input type="text" placeholder="Въведете Hash ID (0x...)" value={revokeId} onChange={(e) => setRevokeId(e.target.value)} />
-          <button onClick={handleRevoke} style={{ backgroundColor: '#dc3545', color: 'white' }}>Анулирай Сертификат</button>
+        <h2>Управление на екипа (Админи)</h2>
+        <input type="text" placeholder="0x Адрес" value={newAdminAddr} onChange={(e) => setNewAdminAddr(e.target.value)} />
+        <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+          <button onClick={() => handleRole('add')} style={{ flex: 1, backgroundColor: '#28a745', color: 'white' }}>Добави Админ</button>
+          <button onClick={() => handleRole('remove')} style={{ flex: 1, backgroundColor: '#6c757d', color: 'white' }}>Премахни Админ</button>
         </div>
       </section>
 
-      <hr style={{ width: '100%', border: '1px solid #eee' }} />
-
       <section>
-        <h2>Управление на Админи (Само за SuperAdmin)</h2>
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <input type="text" placeholder="Въведете 0x Адрес на новия учител" value={newAdminAddr} onChange={(e) => setNewAdminAddr(e.target.value)} />
-          <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
-            <button onClick={() => handleRole('add')} style={{ flex: 1, backgroundColor: '#28a745' }}>Добави Админ</button>
-            <button onClick={() => handleRole('remove')} style={{ flex: 1, backgroundColor: '#6c757d' }}>Премахни Админ</button>
-          </div>
-        </div>
+        <h2>Анулиране</h2>
+        <input type="text" placeholder="Hash ID" value={revokeId} onChange={(e) => setRevokeId(e.target.value)} />
+        <button onClick={handleRevoke} style={{ width: '100%', marginTop: '5px', backgroundColor: '#dc3545', color: 'white' }}>Анулирай</button>
       </section>
 
-      {status && (
-        <div style={{ padding: '15px', background: '#f8f9fa', borderRadius: '5px', borderLeft: '4px solid #007bff' }}>
-          <strong>Системен Статус:</strong> {status}
-        </div>
-      )}
+      {status && <div style={{ padding: '10px', borderLeft: '4px solid #007bff', background: '#f0f0f0' }}>{status}</div>}
     </div>
   );
 }
