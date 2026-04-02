@@ -69,7 +69,7 @@ function IssueForm() {
     <div style={{ padding: '20px', backgroundColor: 'white', borderRadius: '8px', display: 'flex', flexDirection: 'column', gap: '30px' }}>
       
       <section>
-        <h2>🎓 Издаване на нов сертификат</h2>
+        <h2>Издаване на нов сертификат</h2>
         <form onSubmit={handleIssue} style={{ display: 'flex', flexDirection: 'column' }}>
           <input type="text" placeholder="Име на ученик" value={name} onChange={(e) => setName(e.target.value)} required />
           <input type="text" placeholder="Постижение (напр. Hack TUES Winner)" value={course} onChange={(e) => setCourse(e.target.value)} required />
@@ -88,7 +88,7 @@ function IssueForm() {
       <hr style={{ width: '100%', border: '1px solid #eee' }} />
 
       <section>
-        <h2>⚠️ Анулиране на сертификат</h2>
+        <h2>Анулиране на сертификат</h2>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <input type="text" placeholder="Въведете Hash ID (0x...)" value={revokeId} onChange={(e) => setRevokeId(e.target.value)} />
           <button onClick={handleRevoke} style={{ backgroundColor: '#dc3545', color: 'white' }}>Анулирай Сертификат</button>
@@ -98,7 +98,7 @@ function IssueForm() {
       <hr style={{ width: '100%', border: '1px solid #eee' }} />
 
       <section>
-        <h2>👑 Управление на Админи (Само за SuperAdmin)</h2>
+        <h2>Управление на Админи (Само за SuperAdmin)</h2>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <input type="text" placeholder="Въведете 0x Адрес на новия учител" value={newAdminAddr} onChange={(e) => setNewAdminAddr(e.target.value)} />
           <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
