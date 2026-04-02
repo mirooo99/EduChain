@@ -6,8 +6,8 @@ function Header() {
       <h1>EduChain</h1>
       <p>Децентрализирана система за академични сертификати</p>
       <p>Проект на Мирослав Радуканов, ученик в ТУЕС, 8а клас</p>
-      <p>Контракт за проверка: <a href="https://sepolia.etherscan.io/address/0x41383d37529f411d529547107d498f87721c2b139bcd67450093d293afedb9d2" target="_blank" rel="noopener noreferrer">
-        0x41383d37529f411d529547107d498f87721c2b139bcd67450093d293afedb9d2
+      <p>Контракт за проверка: <a href="https://sepolia.etherscan.io/address/0x4E8364aB888a4E7F299DcB3a383C4380DeA7aaA6" target="_blank" rel="noopener noreferrer">
+        0x4E8364aB888a4E7F299DcB3a383C4380DeA7aaA6
     </a>
 </p>
     </header>
