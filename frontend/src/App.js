@@ -11,7 +11,7 @@ function App() {
       <Header />
       <div style={{ textAlign: 'center', marginBottom: '20px' }}>
         <button onClick={() => setView('verify')} style={{ marginRight: '10px' }}>Провери Сертификат</button>
-        <button onClick={() => setView('issue')}>Издай Сертификат (Админ)</button>
+        <button onClick={() => setView('issue')}>Действия за админи</button>
       </div>
 
       {view === 'verify' ? <VerifyForm /> : <IssueForm />}
