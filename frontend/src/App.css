@@ -1,127 +1,167 @@
-/* Вмъкване на по-модерен шрифт */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+/* Внос на по-модерен, "tech" шрифт */
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --primary: #4f46e5;
+  --primary-hover: #4338ca;
+  --bg-color: #f8fafc;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --card-bg: #ffffff;
+  --border: #e2e8f0;
+}
 
 body {
   margin: 0;
-  font-family: 'Inter', sans-serif;
-  /* Патърн вместо градиент */
-  background-color: #f8fafc;
-  background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+  font-family: 'Space Grotesk', sans-serif;
+  background-color: var(--bg-color);
+  /* Фин геометричен патърн (решетка) */
+  background-image: radial-gradient(#cbd5e1 0.8px, transparent 0.8px);
   background-size: 24px 24px;
   min-height: 100vh;
-  color: #1e293b;
+  color: var(--text-main);
   display: flex;
   align-items: center;
 }
 
 .container {
-  max-width: 850px;
-  margin: 0 auto;
-  padding: 40px 20px;
+  max-width: 800px;
   width: 100%;
+  margin: 40px auto;
+  padding: 0 20px;
+  /* Анимация при зареждане на страницата */
+  animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .main-card {
-  background: #ffffff;
-  padding: 40px;
-  border-radius: 12px; /* Малко по-остри ъгли за характер */
-  /* "Solid" сянка вместо мека - изглежда по-дизайнерско */
-  box-shadow: 0 0 0 1px rgba(0,0,0,0.05), 0 10px 30px -5px rgba(0,0,0,0.1);
-  border: 1px solid #e2e8f0;
+  background: var(--card-bg);
+  padding: 50px;
+  border-radius: 24px;
+  /* По-остър и модерен стил на сянката */
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border);
   position: relative;
   overflow: hidden;
 }
 
-/* Навигация */
+/* Декоративен елемент в картата */
+.main-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary), #818cf8);
+}
+
 .nav-container {
-  text-align: center;
-  margin-bottom: 40px;
-  display: flex;
-  justify-content: center;
-  gap: 12px;
+  display: inline-flex;
   background: #f1f5f9;
   padding: 6px;
-  border-radius: 12px;
-  width: fit-content;
-  margin-left: auto;
-  margin-right: auto;
+  border-radius: 14px;
+  margin-bottom: 40px;
+  gap: 4px;
 }
 
 .nav-button {
-  padding: 10px 20px;
-  font-size: 0.9rem;
-  font-weight: 600;
+  padding: 10px 24px;
+  font-size: 0.95rem;
+  font-weight: 500;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  background-color: transparent;
-  color: #64748b;
+  background: transparent;
+  color: var(--text-muted);
 }
 
 .nav-button:hover {
-  color: #1e293b;
+  color: var(--text-main);
   background: rgba(255,255,255,0.5);
 }
 
 .nav-button.active {
-  background-color: #ffffff;
-  color: #0f172a;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  background-color: white;
+  color: var(--primary);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
-/* Инпути */
+/* Интерактивни полета за въвеждане */
 input[type="text"], input[type="date"] {
   width: 100%;
-  padding: 14px 16px;
+  padding: 14px 18px;
   margin: 8px 0 24px 0;
-  border: 1.5px solid #e2e8f0;
-  border-radius: 10px;
+  border: 2px solid var(--border);
+  border-radius: 12px;
   font-size: 1rem;
   font-family: inherit;
-  box-sizing: border-box;
   transition: all 0.2s ease;
   background: #fcfcfd;
 }
 
-input[type="text"]:focus, input[type="date"]:focus {
+input:focus {
   outline: none;
-  border-color: #3b82f6;
-  background: #fff;
-  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+  border-color: var(--primary);
+  background: white;
+  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+  transform: translateY(-1px);
 }
 
-/* Бутони с интеракция */
+/* Бутони с характер */
 button[type="submit"], .action-btn {
   width: 100%;
   padding: 16px;
-  border-radius: 10px;
-  font-weight: 600;
+  border-radius: 12px;
   font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.025em;
   cursor: pointer;
   border: none;
-  background: #0f172a; /* Тъмен, сериозен цвят */
+  background: var(--primary);
   color: white;
   transition: all 0.2s ease;
-  position: relative;
+  box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
 }
 
-button[type="submit"]:hover, .action-btn:hover {
-  background: #1e293b;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+button[type="submit"]:hover:not(:disabled) {
+  background: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
 }
 
-button[type="submit"]:active, .action-btn:active {
-  transform: translateY(0px);
-  filter: brightness(1.2);
+button[type="submit"]:active {
+  transform: translateY(0);
 }
 
-/* Малък детайл за етикета */
-label {
-  font-weight: 600;
-  font-size: 0.85rem;
-  color: #475569;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  filter: grayscale(1);
+}
+
+/* Заглавия */
+h2 {
+  font-weight: 700;
+  font-size: 1.75rem;
+  margin-top: 0;
+  letter-spacing: -0.025em;
+}
+
+/* Стилизиране на скролбара за по-добър финиш */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-color);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
 }
