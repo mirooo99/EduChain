@@ -14,7 +14,7 @@ function IssueForm() {
   const [newAdminAddr, setNewAdminAddr] = useState('');
 
   const [loading, setLoading] = useState(false);
-  const certificateRef = useRef(null); // Референция за PDF дизайна
+  const certificateRef = useRef(null);
 
   const handleIssue = async (e) => {
     e.preventDefault();
@@ -30,7 +30,6 @@ function IssueForm() {
       setStatus('Транзакцията се обработва в блокчейна (около 15-20 сек.)...');
       const receipt = await tx.wait();
 
-      // Намиране на ID от лога на транзакцията
       const log = receipt.logs.find(l => {
         try {
           return contract.interface.parseLog(l).name === "CertificateIssued";
@@ -39,7 +38,7 @@ function IssueForm() {
 
       if (log) {
         const parsedLog = contract.interface.parseLog(log);
-        const generatedId = parsedLog.args[0]; // certId
+        const generatedId = parsedLog.args[0];
         setCertHash(generatedId);
         setStatus('✅ Успешно издаден сертификат!');
       }
@@ -50,8 +49,6 @@ function IssueForm() {
       setLoading(false);
     }
   };
-
-  // --- ЛОГИКА ЗА ГЕНЕРИРАНЕ НА PDF ---
   const downloadPDF = async () => {
     if (!certificateRef.current) return;
     setStatus('Генериране на PDF...');
@@ -205,7 +202,7 @@ function IssueForm() {
                   <h1 style={{ margin: '0 0 10px 0', fontSize: '65px', color: '#102a43', letterSpacing: '5px' }}>СЕРТИФИКАТ</h1>
                   <p style={{ fontSize: '22px', fontStyle: 'italic', color: '#486581' }}>Настоящият документ се издава на</p>
                   <h2 style={{ fontSize: '50px', margin: '15px 0', color: '#d4af37', fontWeight: 'bold' }}>{name}</h2>
-                  <p style={{ fontSize: '22px', fontStyle: 'italic', color: '#486581' }}>за успешно завършено обучение по</p>
+                  <p style={{ fontSize: '22px', fontStyle: 'italic', color: '#486581' }}>за постигнато отличие</p>
                   <h3 style={{ fontSize: '35px', margin: '15px 0', color: '#102a43' }}>{course}</h3>
                 </div>
 
