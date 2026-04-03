@@ -1,4 +1,3 @@
-/* ================== GLOBAL ================== */
 body {
   margin: 0;
   font-family: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -7,16 +6,8 @@ body {
     radial-gradient(circle at bottom right, rgba(90,103,216,0.10) 0%, transparent 32%),
     linear-gradient(135deg, #f4f7fb 0%, #e6edf7 45%, #d9e3f0 100%);
   background-attachment: fixed;
-  background-size: 200% 200%;
   min-height: 100vh;
   color: #24364b;
-
-  animation: backgroundShift 18s ease infinite alternate;
-}
-
-@keyframes backgroundShift {
-  0% { background-position: 0% 50%; }
-  100% { background-position: 100% 50%; }
 }
 
 body::before {
@@ -32,7 +23,6 @@ body::before {
   mask-image: linear-gradient(to bottom, rgba(0,0,0,0.55), transparent 90%);
 }
 
-/* ================== CONTAINER ================== */
 .container {
   max-width: 850px;
   margin: 50px auto;
@@ -41,55 +31,26 @@ body::before {
   z-index: 1;
 }
 
-/* ================== CARD ================== */
 .main-card {
   background: rgba(255, 255, 255, 0.78);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   padding: 40px;
   border-radius: 20px;
-  position: relative;
-  overflow: hidden;
-
-  border: 1px solid rgba(255,255,255,0.55);
-
   box-shadow:
     0 18px 45px rgba(17, 24, 39, 0.10),
     inset 0 1px 0 rgba(255,255,255,0.6);
-
+  border: 1px solid rgba(255,255,255,0.55);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
-
-  animation: floatCard 6s ease-in-out infinite;
-}
-
-@keyframes floatCard {
-  0%,100% { transform: translateY(0px); }
-  50% { transform: translateY(-6px); }
 }
 
 .main-card:hover {
-  transform: translateY(-3px);
+  transform: translateY(-2px);
   box-shadow:
     0 22px 55px rgba(17, 24, 39, 0.13),
     inset 0 1px 0 rgba(255,255,255,0.65);
 }
 
-/* glow border */
-.main-card::after {
-  content: "";
-  position: absolute;
-  inset: -2px;
-  border-radius: 22px;
-  background: linear-gradient(120deg, transparent, rgba(90,103,216,0.25), transparent);
-  opacity: 0;
-  transition: opacity 0.4s ease;
-}
-
-.main-card:hover::after {
-  opacity: 1;
-}
-
-/* ================== NAV ================== */
 .nav-container {
   text-align: center;
   margin-bottom: 30px;
@@ -103,137 +64,83 @@ body::before {
   padding: 12px 24px;
   font-size: 1rem;
   font-weight: 600;
-  border-radius: 999px;
   border: 1px solid rgba(90, 103, 216, 0.14);
-
+  border-radius: 999px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, color 0.2s ease;
   background: rgba(255,255,255,0.9);
   color: #5468d4;
-
-  position: relative;
-  overflow: hidden;
-  cursor: pointer;
-
-  transition: all 0.25s ease;
-
   box-shadow: 0 6px 16px rgba(17, 24, 39, 0.06);
 }
 
 .nav-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 10px 22px rgba(17, 24, 39, 0.10);
+  background: #ffffff;
 }
 
 .nav-button:active {
-  transform: scale(0.96);
-}
-
-/* ripple */
-.nav-button::after {
-  content: "";
-  position: absolute;
-  width: 0;
-  height: 0;
-  background: rgba(90,103,216,0.25);
-  border-radius: 50%;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  opacity: 0;
-}
-
-.nav-button:active::after {
-  width: 200px;
-  height: 200px;
-  opacity: 1;
-  transition: 0s;
+  transform: translateY(0);
 }
 
 .nav-button.active {
   background: linear-gradient(135deg, #5a67d8 0%, #667eea 100%);
   color: white;
-  border: none;
   box-shadow: 0 10px 24px rgba(90, 103, 216, 0.28);
+  border-color: transparent;
 }
 
-/* ================== INPUTS ================== */
 input[type="text"],
 input[type="date"] {
   width: 100%;
   padding: 13px 15px;
   margin: 10px 0 20px 0;
-  border-radius: 12px;
   border: 1.5px solid #dbe5f0;
-
+  border-radius: 12px;
+  font-size: 1rem;
+  box-sizing: border-box;
   background: rgba(255,255,255,0.92);
   color: #24364b;
-
-  font-size: 1rem;
   outline: none;
-
-  transition: all 0.25s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
 }
 
-input:hover {
+input[type="text"]:hover,
+input[type="date"]:hover {
   border-color: #b8c7e0;
 }
 
-input:focus {
-  border-color: #667eea;
+input[type="text"]:focus,
+input[type="date"]:focus {
+  border-color: #5a67d8;
+  box-shadow: 0 0 0 4px rgba(90, 103, 216, 0.12);
   background: #ffffff;
   transform: translateY(-1px);
-
-  box-shadow:
-    0 0 0 4px rgba(90, 103, 216, 0.15),
-    0 8px 20px rgba(90, 103, 216, 0.12);
 }
 
-/* ================== BUTTONS ================== */
-button,
+button[type="submit"],
 .action-btn {
   width: 100%;
   padding: 14px;
   border-radius: 12px;
-  border: none;
-
   font-weight: 700;
-  color: white;
-
   cursor: pointer;
-  position: relative;
-  overflow: hidden;
-
+  border: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease, opacity 0.2s ease;
   background: linear-gradient(135deg, #5a67d8 0%, #667eea 100%);
-
+  color: white;
   box-shadow: 0 10px 24px rgba(90, 103, 216, 0.22);
-
-  transition: all 0.25s ease;
 }
 
-button:hover,
+button[type="submit"]:hover,
 .action-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 14px 30px rgba(90, 103, 216, 0.28);
+  filter: saturate(1.05);
 }
 
-button:active {
-  transform: scale(0.97);
-}
-
-/* shine effect */
-button::before,
-.action-btn::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -75%;
-  width: 50%;
-  height: 100%;
-  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.5), transparent);
-  transform: skewX(-20deg);
-}
-
-button:hover::before,
-.action-btn:hover::before {
-  left: 130%;
-  transition: 0.6s;
+button[type="submit"]:active,
+.action-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 8px 18px rgba(90, 103, 216, 0.18);
 }
