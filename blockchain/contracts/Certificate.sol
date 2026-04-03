@@ -23,18 +23,15 @@ contract Certificate {
     }
 
     constructor() {
-        // Човекът, който деплойва договора, става първият админ
         isAdmin[msg.sender] = true;
         emit AdminStatusChanged(msg.sender, true);
     }
 
-    // Вече всеки админ може да добавя други админи
     function addAdmin(address _addr) public onlyAdmin {
         isAdmin[_addr] = true;
         emit AdminStatusChanged(_addr, true);
     }
 
-    // Всеки админ може да премахва други (внимавай да не премахнеш себе си!)
     function removeAdmin(address _addr) public onlyAdmin {
         isAdmin[_addr] = false;
         emit AdminStatusChanged(_addr, false);
