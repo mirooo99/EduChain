@@ -100,7 +100,7 @@ function VerifyForm() {
           )}
           <p><strong>Ученик:</strong> {result.name}</p>
           <p><strong>Постижение:</strong> {result.course}</p>
-          <p><strong>Дата на издаване:</strong> {result.date.split('-').reverse().join('.')}</p>
+          <p><strong>Дата на издаване:</strong> {result.date}</p>
           <p><strong>Статус:</strong> {result.isValid ? "Активен" : "Невалиден / Оттеглен"}</p>
           <hr />
           
@@ -178,9 +178,7 @@ function VerifyForm() {
                   marginBottom: '10px' // Вдига секцията над рамката
                 }}>
                   <div style={{ textAlign: 'center', width: '250px' }}>
-                    <p style={{ fontSize: '20px', margin: '0 0 10px 0' }}>
-  {result.date.includes('-') ? result.date.split('-').reverse().join('.') : result.date}
-</p>
+                    <p style={{ fontSize: '20px', margin: '0 0 10px 0' }}>{result.date}</p>
                     <div style={{ width: '100%', borderBottom: '2px solid #102a43', marginBottom: '5px' }}></div>
                     <p style={{ fontSize: '16px', color: '#486581', margin: 0 }}>Дата на издаване</p>
                   </div>
