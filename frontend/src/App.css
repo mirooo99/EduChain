@@ -1,167 +1,146 @@
-/* Внос на по-модерен, "tech" шрифт */
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
-
-:root {
-  --primary: #4f46e5;
-  --primary-hover: #4338ca;
-  --bg-color: #f8fafc;
-  --text-main: #0f172a;
-  --text-muted: #64748b;
-  --card-bg: #ffffff;
-  --border: #e2e8f0;
-}
-
 body {
   margin: 0;
-  font-family: 'Space Grotesk', sans-serif;
-  background-color: var(--bg-color);
-  /* Фин геометричен патърн (решетка) */
-  background-image: radial-gradient(#cbd5e1 0.8px, transparent 0.8px);
-  background-size: 24px 24px;
+  font-family: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(255,255,255,0.65) 0%, transparent 28%),
+    radial-gradient(circle at bottom right, rgba(90,103,216,0.10) 0%, transparent 32%),
+    linear-gradient(135deg, #f4f7fb 0%, #e6edf7 45%, #d9e3f0 100%);
+  background-attachment: fixed;
   min-height: 100vh;
-  color: var(--text-main);
-  display: flex;
-  align-items: center;
+  color: #24364b;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.22;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.45) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.45) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,0.55), transparent 90%);
 }
 
 .container {
-  max-width: 800px;
-  width: 100%;
-  margin: 40px auto;
+  max-width: 850px;
+  margin: 50px auto;
   padding: 0 20px;
-  /* Анимация при зареждане на страницата */
-  animation: fadeIn 0.6s ease-out;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  position: relative;
+  z-index: 1;
 }
 
 .main-card {
-  background: var(--card-bg);
-  padding: 50px;
-  border-radius: 24px;
-  /* По-остър и модерен стил на сянката */
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-  border: 1px solid var(--border);
-  position: relative;
-  overflow: hidden;
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow:
+    0 18px 45px rgba(17, 24, 39, 0.10),
+    inset 0 1px 0 rgba(255,255,255,0.6);
+  border: 1px solid rgba(255,255,255,0.55);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-/* Декоративен елемент в картата */
-.main-card::before {
-  content: "";
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, var(--primary), #818cf8);
+.main-card:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 22px 55px rgba(17, 24, 39, 0.13),
+    inset 0 1px 0 rgba(255,255,255,0.65);
 }
 
 .nav-container {
-  display: inline-flex;
-  background: #f1f5f9;
-  padding: 6px;
-  border-radius: 14px;
-  margin-bottom: 40px;
-  gap: 4px;
+  text-align: center;
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
 }
 
 .nav-button {
-  padding: 10px 24px;
-  font-size: 0.95rem;
-  font-weight: 500;
-  border: none;
-  border-radius: 10px;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: 1px solid rgba(90, 103, 216, 0.14);
+  border-radius: 999px;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  background: transparent;
-  color: var(--text-muted);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+  background: rgba(255,255,255,0.9);
+  color: #5468d4;
+  box-shadow: 0 6px 16px rgba(17, 24, 39, 0.06);
 }
 
 .nav-button:hover {
-  color: var(--text-main);
-  background: rgba(255,255,255,0.5);
-}
-
-.nav-button.active {
-  background-color: white;
-  color: var(--primary);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-}
-
-/* Интерактивни полета за въвеждане */
-input[type="text"], input[type="date"] {
-  width: 100%;
-  padding: 14px 18px;
-  margin: 8px 0 24px 0;
-  border: 2px solid var(--border);
-  border-radius: 12px;
-  font-size: 1rem;
-  font-family: inherit;
-  transition: all 0.2s ease;
-  background: #fcfcfd;
-}
-
-input:focus {
-  outline: none;
-  border-color: var(--primary);
-  background: white;
-  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
-  transform: translateY(-1px);
-}
-
-/* Бутони с характер */
-button[type="submit"], .action-btn {
-  width: 100%;
-  padding: 16px;
-  border-radius: 12px;
-  font-size: 1rem;
-  font-weight: 600;
-  letter-spacing: 0.025em;
-  cursor: pointer;
-  border: none;
-  background: var(--primary);
-  color: white;
-  transition: all 0.2s ease;
-  box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
-}
-
-button[type="submit"]:hover:not(:disabled) {
-  background: var(--primary-hover);
   transform: translateY(-2px);
-  box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
+  box-shadow: 0 10px 22px rgba(17, 24, 39, 0.10);
+  background: #ffffff;
 }
 
-button[type="submit"]:active {
+.nav-button:active {
   transform: translateY(0);
 }
 
-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  filter: grayscale(1);
+.nav-button.active {
+  background: linear-gradient(135deg, #5a67d8 0%, #667eea 100%);
+  color: white;
+  box-shadow: 0 10px 24px rgba(90, 103, 216, 0.28);
+  border-color: transparent;
 }
 
-/* Заглавия */
-h2 {
+input[type="text"],
+input[type="date"] {
+  width: 100%;
+  padding: 13px 15px;
+  margin: 10px 0 20px 0;
+  border: 1.5px solid #dbe5f0;
+  border-radius: 12px;
+  font-size: 1rem;
+  box-sizing: border-box;
+  background: rgba(255,255,255,0.92);
+  color: #24364b;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
+}
+
+input[type="text"]:hover,
+input[type="date"]:hover {
+  border-color: #b8c7e0;
+}
+
+input[type="text"]:focus,
+input[type="date"]:focus {
+  border-color: #5a67d8;
+  box-shadow: 0 0 0 4px rgba(90, 103, 216, 0.12);
+  background: #ffffff;
+  transform: translateY(-1px);
+}
+
+button[type="submit"],
+.action-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
   font-weight: 700;
-  font-size: 1.75rem;
-  margin-top: 0;
-  letter-spacing: -0.025em;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease, opacity 0.2s ease;
+  background: linear-gradient(135deg, #5a67d8 0%, #667eea 100%);
+  color: white;
+  box-shadow: 0 10px 24px rgba(90, 103, 216, 0.22);
 }
 
-/* Стилизиране на скролбара за по-добър финиш */
-::-webkit-scrollbar {
-  width: 8px;
+button[type="submit"]:hover,
+.action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(90, 103, 216, 0.28);
+  filter: saturate(1.05);
 }
-::-webkit-scrollbar-track {
-  background: var(--bg-color);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 10px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--text-muted);
+
+button[type="submit"]:active,
+.action-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 8px 18px rgba(90, 103, 216, 0.18);
 }
