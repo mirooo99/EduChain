@@ -9,7 +9,7 @@ function VerifyForm() {
   const [result, setResult] = useState(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const certificateRef = useRef(null); // Референция за PDF дизайна
+  const certificateRef = useRef(null);
 
   const handleVerify = async (e) => {
     e.preventDefault();
@@ -131,7 +131,7 @@ function VerifyForm() {
               height: '210mm',
               backgroundColor: '#faf9f6',
               boxSizing: 'border-box',
-              padding: '10mm', // Намален padding за повече място
+              padding: '10mm',
               position: 'relative',
               fontFamily: '"Georgia", "Times New Roman", serif',
               color: '#102a43'
@@ -145,7 +145,7 @@ function VerifyForm() {
                 width: '100%', height: '100%', border: '3px solid #d4af37',
                 boxSizing: 'border-box', display: 'flex', flexDirection: 'column',
                 justifyContent: 'space-between', alignItems: 'center', 
-                padding: '30px 60px 40px 60px' // Увеличен долен padding (40px)
+                padding: '30px 60px 40px 60px'
               }}>
                 
                 <div style={{ textAlign: 'center' }}>
@@ -163,7 +163,7 @@ function VerifyForm() {
                     {result.name}
                   </h2>
                   
-                  <p style={{ fontSize: '22px', fontStyle: 'italic', color: '#486581' }}>за успешно завършено обучение по</p>
+                  <p style={{ fontSize: '22px', fontStyle: 'italic', color: '#486581' }}>за получено отличие</p>
                   
                   <h3 style={{ fontSize: '35px', margin: '15px 0', color: '#102a43' }}>
                     {result.course}
@@ -175,7 +175,7 @@ function VerifyForm() {
                   display: 'flex', 
                   justifyContent: 'space-between', 
                   alignItems: 'flex-end', 
-                  marginBottom: '10px' // Вдига секцията над рамката
+                  marginBottom: '10px'
                 }}>
                   <div style={{ textAlign: 'center', width: '250px' }}>
                     <p style={{ fontSize: '20px', margin: '0 0 10px 0' }}>{result.date}</p>
