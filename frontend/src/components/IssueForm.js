@@ -12,7 +12,7 @@ function IssueForm() {
   const [certHash, setCertHash] = useState('');
   const [revokeId, setRevokeId] = useState('');
   const [newAdminAddr, setNewAdminAddr] = useState('');
-  
+
   const [loading, setLoading] = useState(false);
   const certificateRef = useRef(null); // Референция за PDF дизайна
 
@@ -23,13 +23,13 @@ function IssueForm() {
     try {
       setStatus('Свързване с MetaMask...');
       const contract = await getContract();
-      
+
       setStatus('Моля, потвърдете транзакцията в MetaMask...');
       const tx = await contract.issueCertificate(name, course, date);
-      
+
       setStatus('Транзакцията се обработва в блокчейна (около 15-20 сек.)...');
       const receipt = await tx.wait();
-      
+
       // Намиране на ID от лога на транзакцията
       const log = receipt.logs.find(l => {
         try {
@@ -55,7 +55,7 @@ function IssueForm() {
   const downloadPDF = async () => {
     if (!certificateRef.current) return;
     setStatus('Генериране на PDF...');
-    
+
     try {
       const element = certificateRef.current;
       const canvas = await html2canvas(element, { 
@@ -63,13 +63,13 @@ function IssueForm() {
         useCORS: true,
         logging: false
       });
-      
+
       const imgData = canvas.toDataURL('image/png');
       const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
 
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-      
+
       pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
       pdf.save(`EduChain_New_Certificate_${name}.pdf`);
       setStatus('✅ PDF документът е изтеглен!');
@@ -87,7 +87,7 @@ function IssueForm() {
       let tx = (action === 'add') 
         ? await contract.addAdmin(newAdminAddr) 
         : await contract.removeAdmin(newAdminAddr);
-      
+
       await tx.wait();
       setStatus('✅ Списъкът с админи е обновен!');
     } catch (error) {
@@ -111,7 +111,7 @@ function IssueForm() {
 
   return (
     <div style={{ padding: '20px', backgroundColor: 'white', borderRadius: '8px', display: 'flex', flexDirection: 'column', gap: '25px' }}>
-      
+
       {/* СЕКЦИЯ: ИЗДАВАНЕ */}
       <section>
         <h2>Издаване на сертификат</h2>
@@ -128,7 +128,7 @@ function IssueForm() {
           <div style={{ marginTop: '20px', padding: '15px', background: '#f8fff9', border: '2px solid #28a745', borderRadius: '5px' }}>
             <p style={{ color: '#28a745', fontWeight: 'bold', margin: '0 0 10px 0' }}>✅ Успех!</p>
             <p style={{ fontSize: '0.9rem' }}><strong>Hash ID:</strong> <code style={{ wordBreak: 'break-all' }}>{certHash}</code></p>
-            
+
             {/* БУТОН ЗА PDF */}
             <button 
               onClick={downloadPDF} 
@@ -211,7 +211,7 @@ function IssueForm() {
 
                 <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '10px' }}>
                   <div style={{ textAlign: 'center', width: '250px' }}>
-                    <p style={{ fontSize: '20px', margin: '0 0 10px 0' }}>{result.date}</p>
+                    <p style={{ fontSize: '20px', margin: '0 0 10px 0' }}>{date}</p>
                     <div style={{ width: '100%', borderBottom: '2px solid #102a43', marginBottom: '5px' }}></div>
                     <p style={{ fontSize: '16px', color: '#486581', margin: 0 }}>Дата на издаване</p>
                   </div>
