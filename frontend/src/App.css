@@ -1,156 +1,163 @@
+/* ===== ROOT & THEMES ===== */
 :root {
-  --bg1: #f4f7fb;
-  --bg2: #e6edf7;
-  --bg3: #d9e3f0;
+  /* Light theme */
+  --bg-start: #f4f7fb;
+  --bg-mid: #e6edf7;
+  --bg-end: #d9e3f0;
   --text: #24364b;
-  --card: rgba(255,255,255,0.8);
+  --card-bg: rgba(255,255,255,0.85);
+  --btn-gradient: linear-gradient(135deg, #ff7a18, #ffb347);
+  --accent: #5a67d8;
 }
 
 body.dark {
-  --bg1: #0f172a;
-  --bg2: #111827;
-  --bg3: #1f2937;
+  /* Dark theme */
+  --bg-start: #0f172a;
+  --bg-mid: #111827;
+  --bg-end: #1f2937;
   --text: #e5e7eb;
-  --card: rgba(30,41,59,0.7);
+  --card-bg: rgba(30,41,59,0.75);
+  --btn-gradient: linear-gradient(135deg, #667eea, #5a67d8);
+  --accent: #667eea;
 }
 
 body {
   margin: 0;
-  font-family: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  background: linear-gradient(135deg, var(--bg1), var(--bg2), var(--bg3));
+  font-family: "Inter", sans-serif;
+  background: linear-gradient(135deg, var(--bg-start), var(--bg-mid), var(--bg-end));
   background-size: 200% 200%;
   color: var(--text);
   min-height: 100vh;
-  transition: background 0.4s, color 0.4s;
+  transition: background 0.4s ease, color 0.4s ease;
 }
 
+/* ===== NAVIGATION ===== */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  position: sticky;
+  top: 0;
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  z-index: 100;
+}
+
+.navbar .logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.navbar .toggle-theme {
+  cursor: pointer;
+  padding: 8px 14px;
+  border-radius: 10px;
+  background: var(--accent);
+  color: #fff;
+}
+
+/* ===== MAIN CONTENT ===== */
 .container {
-  max-width: 850px;
-  margin: 100px auto;
+  max-width: 960px;
+  margin: 80px auto 40px;
   padding: 0 20px;
 }
 
+/* ===== CARD & PARALLAX ===== */
+/* Inspired by 3D parallax card ideas (pure CSS tilt feel) :contentReference[oaicite:2]{index=2} */
 .card {
-  background: var(--card);
-  backdrop-filter: blur(12px);
-  border-radius: 20px;
-  padding: 40px;
-  box-shadow: 0 18px 45px rgba(17,24,39,0.1), inset 0 1px 0 rgba(255,255,255,0.6);
-  border: 1px solid rgba(255,255,255,0.55);
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.5);
+  transform-style: preserve-3d;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  position: relative;
-  overflow: hidden;
+  perspective: 1000px;
 }
 
 .card:hover {
-  transform: translateY(-6px) rotateX(3deg) rotateY(3deg);
-  box-shadow: 0 25px 55px rgba(17,24,39,0.15), inset 0 1px 0 rgba(255,255,255,0.65);
+  transform: rotateX(6deg) rotateY(-6deg) scale(1.02);
+  box-shadow: 0 20px 45px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.6);
 }
 
-.card::after {
+/* Light shine overlay on hover (pure CSS shine) :contentReference[oaicite:3]{index=3} */
+.card::before {
   content: "";
   position: absolute;
-  inset: -2px;
-  border-radius: 22px;
-  background: linear-gradient(120deg, transparent, rgba(90,103,216,0.25), transparent);
+  inset: 0;
+  background: linear-gradient(120deg, rgba(255,255,255,0.2), transparent);
   opacity: 0;
   transition: opacity 0.4s ease;
 }
 
-.card:hover::after {
+.card:hover::before {
   opacity: 1;
 }
 
-/* BUTTONS */
+/* ===== BUTTONS ===== */
+/* Smooth hover color shift + shine */ 
 .btn {
-  padding: 14px 20px;
+  padding: 14px 24px;
   border: none;
   border-radius: 12px;
   font-weight: 700;
   cursor: pointer;
+  background: var(--btn-gradient);
+  color: white;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(135deg, #ff7a18, #ffb347);
-  color: white;
-  transition: all 0.25s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .btn:hover {
   transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 10px 28px rgba(0,0,0,0.2);
 }
 
-.btn::before {
+/* Sliding shine effect (CSS only) */
+.btn::after {
   content: "";
   position: absolute;
   top: -50%;
   left: -50%;
   width: 200%;
   height: 200%;
-  background: linear-gradient(120deg, rgba(255,255,255,0.3), transparent, rgba(255,255,255,0.3));
+  background: linear-gradient(120deg, rgba(255,255,255,0.35), transparent);
   transform: rotate(45deg) translateX(-100%);
   transition: transform 0.6s ease;
 }
 
-.btn:hover::before {
+.btn:hover::after {
   transform: rotate(45deg) translateX(100%);
 }
 
+/* Press-like feedback */
 .btn:active {
   transform: scale(0.97);
-  box-shadow: 0 8px 18px rgba(90,103,216,0.18);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.2);
 }
 
-/* INPUTS */
-input[type="text"], input[type="date"] {
+/* ===== INPUTS ===== */
+input[type="text"],
+input[type="date"] {
   width: 100%;
-  padding: 13px 15px;
-  margin: 10px 0 20px 0;
+  padding: 12px 16px;
+  margin: 12px 0 24px;
   border: 1.5px solid #dbe5f0;
-  border-radius: 12px;
-  background: rgba(255,255,255,0.92);
+  border-radius: 10px;
+  background: var(--card-bg);
   color: var(--text);
-  font-size: 1rem;
-  outline: none;
-  transition: all 0.25s ease;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 input[type="text"]:hover,
 input[type="date"]:hover {
-  border-color: #b8c7e0;
+  border-color: var(--accent);
 }
 
 input[type="text"]:focus,
 input[type="date"]:focus {
-  border-color: #667eea;
-  background: #ffffff;
-  transform: translateY(-1px);
-  box-shadow: 0 0 0 4px rgba(90,103,216,0.12), 0 8px 20px rgba(90,103,216,0.12);
-}
-
-/* NAV BUTTONS */
-.nav-button {
-  padding: 12px 24px;
-  font-size: 1rem;
-  font-weight: 600;
-  border: 1px solid rgba(90,103,216,0.14);
-  border-radius: 999px;
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, color 0.2s ease;
-  background: rgba(255,255,255,0.9);
-  color: #5468d4;
-  box-shadow: 0 6px 16px rgba(17,24,39,0.06);
-  position: relative;
-  overflow: hidden;
-}
-
-.nav-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 22px rgba(17,24,39,0.1);
-}
-
-.nav-button.active {
-  background: linear-gradient(135deg, #5a67d8 0%, #667eea 100%);
-  color: white;
-  border-color: transparent;
-  box-shadow: 0 10px 24px rgba(90,103,216,0.28);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(90,103,216,0.15);
 }
