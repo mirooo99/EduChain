@@ -1,163 +1,239 @@
-/* ===== ROOT & THEMES ===== */
-:root {
-  /* Light theme */
-  --bg-start: #f4f7fb;
-  --bg-mid: #e6edf7;
-  --bg-end: #d9e3f0;
-  --text: #24364b;
-  --card-bg: rgba(255,255,255,0.85);
-  --btn-gradient: linear-gradient(135deg, #ff7a18, #ffb347);
-  --accent: #5a67d8;
-}
-
-body.dark {
-  /* Dark theme */
-  --bg-start: #0f172a;
-  --bg-mid: #111827;
-  --bg-end: #1f2937;
-  --text: #e5e7eb;
-  --card-bg: rgba(30,41,59,0.75);
-  --btn-gradient: linear-gradient(135deg, #667eea, #5a67d8);
-  --accent: #667eea;
-}
-
+/* ================== GLOBAL ================== */
 body {
   margin: 0;
-  font-family: "Inter", sans-serif;
-  background: linear-gradient(135deg, var(--bg-start), var(--bg-mid), var(--bg-end));
+  font-family: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(255,255,255,0.65) 0%, transparent 28%),
+    radial-gradient(circle at bottom right, rgba(90,103,216,0.10) 0%, transparent 32%),
+    linear-gradient(135deg, #f4f7fb 0%, #e6edf7 45%, #d9e3f0 100%);
+  background-attachment: fixed;
   background-size: 200% 200%;
-  color: var(--text);
   min-height: 100vh;
-  transition: background 0.4s ease, color 0.4s ease;
+  color: #24364b;
+
+  animation: backgroundShift 18s ease infinite alternate;
 }
 
-/* ===== NAVIGATION ===== */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 24px;
-  position: sticky;
-  top: 0;
-  background: var(--card-bg);
-  backdrop-filter: blur(10px);
-  z-index: 100;
+@keyframes backgroundShift {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
 }
 
-.navbar .logo {
-  font-size: 1.5rem;
-  font-weight: bold;
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.22;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.45) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.45) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,0.55), transparent 90%);
 }
 
-.navbar .toggle-theme {
-  cursor: pointer;
-  padding: 8px 14px;
-  border-radius: 10px;
-  background: var(--accent);
-  color: #fff;
-}
-
-/* ===== MAIN CONTENT ===== */
+/* ================== CONTAINER ================== */
 .container {
-  max-width: 960px;
-  margin: 80px auto 40px;
+  max-width: 850px;
+  margin: 50px auto;
   padding: 0 20px;
+  position: relative;
+  z-index: 1;
 }
 
-/* ===== CARD & PARALLAX ===== */
-/* Inspired by 3D parallax card ideas (pure CSS tilt feel) :contentReference[oaicite:2]{index=2} */
-.card {
-  background: var(--card-bg);
-  border-radius: 16px;
-  padding: 32px;
-  box-shadow: 0 12px 30px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.5);
-  transform-style: preserve-3d;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  perspective: 1000px;
+/* ================== CARD ================== */
+.main-card {
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  padding: 40px;
+  border-radius: 20px;
+  position: relative;
+  overflow: hidden;
+
+  border: 1px solid rgba(255,255,255,0.55);
+
+  box-shadow:
+    0 18px 45px rgba(17, 24, 39, 0.10),
+    inset 0 1px 0 rgba(255,255,255,0.6);
+
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+  animation: floatCard 6s ease-in-out infinite;
 }
 
-.card:hover {
-  transform: rotateX(6deg) rotateY(-6deg) scale(1.02);
-  box-shadow: 0 20px 45px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.6);
+@keyframes floatCard {
+  0%,100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
 }
 
-/* Light shine overlay on hover (pure CSS shine) :contentReference[oaicite:3]{index=3} */
-.card::before {
+.main-card:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 22px 55px rgba(17, 24, 39, 0.13),
+    inset 0 1px 0 rgba(255,255,255,0.65);
+}
+
+/* glow border */
+.main-card::after {
   content: "";
   position: absolute;
-  inset: 0;
-  background: linear-gradient(120deg, rgba(255,255,255,0.2), transparent);
+  inset: -2px;
+  border-radius: 22px;
+  background: linear-gradient(120deg, transparent, rgba(90,103,216,0.25), transparent);
   opacity: 0;
   transition: opacity 0.4s ease;
 }
 
-.card:hover::before {
+.main-card:hover::after {
   opacity: 1;
 }
 
-/* ===== BUTTONS ===== */
-/* Smooth hover color shift + shine */ 
-.btn {
-  padding: 14px 24px;
-  border: none;
-  border-radius: 12px;
-  font-weight: 700;
-  cursor: pointer;
-  background: var(--btn-gradient);
-  color: white;
+/* ================== NAV ================== */
+.nav-container {
+  text-align: center;
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.nav-button {
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 999px;
+  border: 1px solid rgba(90, 103, 216, 0.14);
+
+  background: rgba(255,255,255,0.9);
+  color: #5468d4;
+
   position: relative;
   overflow: hidden;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  cursor: pointer;
+
+  transition: all 0.25s ease;
+
+  box-shadow: 0 6px 16px rgba(17, 24, 39, 0.06);
 }
 
-.btn:hover {
-  transform: translateY(-3px) scale(1.03);
-  box-shadow: 0 10px 28px rgba(0,0,0,0.2);
+.nav-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(17, 24, 39, 0.10);
 }
 
-/* Sliding shine effect (CSS only) */
-.btn::after {
+.nav-button:active {
+  transform: scale(0.96);
+}
+
+/* ripple */
+.nav-button::after {
   content: "";
   position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(120deg, rgba(255,255,255,0.35), transparent);
-  transform: rotate(45deg) translateX(-100%);
-  transition: transform 0.6s ease;
+  width: 0;
+  height: 0;
+  background: rgba(90,103,216,0.25);
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
 }
 
-.btn:hover::after {
-  transform: rotate(45deg) translateX(100%);
+.nav-button:active::after {
+  width: 200px;
+  height: 200px;
+  opacity: 1;
+  transition: 0s;
 }
 
-/* Press-like feedback */
-.btn:active {
-  transform: scale(0.97);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+.nav-button.active {
+  background: linear-gradient(135deg, #5a67d8 0%, #667eea 100%);
+  color: white;
+  border: none;
+  box-shadow: 0 10px 24px rgba(90, 103, 216, 0.28);
 }
 
-/* ===== INPUTS ===== */
+/* ================== INPUTS ================== */
 input[type="text"],
 input[type="date"] {
   width: 100%;
-  padding: 12px 16px;
-  margin: 12px 0 24px;
+  padding: 13px 15px;
+  margin: 10px 0 20px 0;
+  border-radius: 12px;
   border: 1.5px solid #dbe5f0;
-  border-radius: 10px;
-  background: var(--card-bg);
-  color: var(--text);
-  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+
+  background: rgba(255,255,255,0.92);
+  color: #24364b;
+
+  font-size: 1rem;
+  outline: none;
+
+  transition: all 0.25s ease;
 }
 
-input[type="text"]:hover,
-input[type="date"]:hover {
-  border-color: var(--accent);
+input:hover {
+  border-color: #b8c7e0;
 }
 
-input[type="text"]:focus,
-input[type="date"]:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 4px rgba(90,103,216,0.15);
+input:focus {
+  border-color: #667eea;
+  background: #ffffff;
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 0 0 4px rgba(90, 103, 216, 0.15),
+    0 8px 20px rgba(90, 103, 216, 0.12);
+}
+
+/* ================== BUTTONS ================== */
+button,
+.action-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  border: none;
+
+  font-weight: 700;
+  color: white;
+
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+
+  background: linear-gradient(135deg, #5a67d8 0%, #667eea 100%);
+
+  box-shadow: 0 10px 24px rgba(90, 103, 216, 0.22);
+
+  transition: all 0.25s ease;
+}
+
+button:hover,
+.action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(90, 103, 216, 0.28);
+}
+
+button:active {
+  transform: scale(0.97);
+}
+
+/* shine effect */
+button::before,
+.action-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.5), transparent);
+  transform: skewX(-20deg);
+}
+
+button:hover::before,
+.action-btn:hover::before {
+  left: 130%;
+  transition: 0.6s;
 }
