@@ -1,68 +1,120 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+
 body {
   margin: 0;
-  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  font-family: 'Inter', sans-serif;
+  background-color: #f8fafc;
+  background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+  background-size: 24px 24px;
   min-height: 100vh;
-  color: #2c3e50;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
 }
 
 .container {
   max-width: 850px;
-  margin: 50px auto;
-  padding: 0 20px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  width: 100%;
 }
 
 .main-card {
-  background: white;
+  background: #ffffff;
   padding: 40px;
-  border-radius: 16px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-  border: 1px solid #e1e8f0;
+  border-radius: 12px;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.05), 0 10px 30px -5px rgba(0,0,0,0.1);
+  border: 1px solid #e2e8f0;
+  position: relative;
+  overflow: hidden;
 }
 
 .nav-container {
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 40px;
   display: flex;
   justify-content: center;
-  gap: 15px;
+  gap: 12px;
+  background: #f1f5f9;
+  padding: 6px;
+  border-radius: 12px;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .nav-button {
-  padding: 12px 24px;
-  font-size: 1rem;
+  padding: 10px 20px;
+  font-size: 0.9rem;
   font-weight: 600;
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  background-color: #ffffff;
-  color: #5a67d8;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  background-color: transparent;
+  color: #64748b;
+}
+
+.nav-button:hover {
+  color: #1e293b;
+  background: rgba(255,255,255,0.5);
 }
 
 .nav-button.active {
-  background-color: #5a67d8;
-  color: white;
-  box-shadow: 0 4px 12px rgba(90, 103, 216, 0.3);
+  background-color: #ffffff;
+  color: #0f172a;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 input[type="text"], input[type="date"] {
   width: 100%;
-  padding: 12px 15px;
-  margin: 10px 0 20px 0;
-  border: 2px solid #edf2f7;
-  border-radius: 8px;
+  padding: 14px 16px;
+  margin: 8px 0 24px 0;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
   font-size: 1rem;
+  font-family: inherit;
   box-sizing: border-box;
+  transition: all 0.2s ease;
+  background: #fcfcfd;
+}
+
+input[type="text"]:focus, input[type="date"]:focus {
+  outline: none;
+  border-color: #3b82f6;
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
 }
 
 button[type="submit"], .action-btn {
   width: 100%;
-  padding: 14px;
-  border-radius: 8px;
-  font-weight: bold;
+  padding: 16px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 1rem;
   cursor: pointer;
   border: none;
-  transition: opacity 0.2s;
+  background: #0f172a;
+  color: white;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+button[type="submit"]:hover, .action-btn:hover {
+  background: #1e293b;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+button[type="submit"]:active, .action-btn:active {
+  transform: translateY(0px);
+  filter: brightness(1.2);
+}
+
+label {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
