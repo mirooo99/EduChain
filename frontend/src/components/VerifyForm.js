@@ -35,11 +35,8 @@ function VerifyForm() {
     }
   };
 
-  // --- ЛОГИКА ЗА ГЕНЕРИРАНЕ НА PDF ---
   const downloadPDF = async () => {
     if (!certificateRef.current) return;
-    
-    // Сменяме бутона на "Зареждане", докато прави PDF
     setLoading(true);
     
     try {
@@ -106,11 +103,7 @@ function VerifyForm() {
           <p><strong>Дата на издаване:</strong> {result.date}</p>
           <p><strong>Статус:</strong> {result.isValid ? "Активен" : "Невалиден / Оттеглен"}</p>
           <hr />
-          <small style={{ color: '#666', display: 'block', marginBottom: '15px' }}>
-            Данните са извлечени директно от Smart Contract в Sepolia Testnet.
-          </small>
-
-          {/* Бутон за изтегляне - показва се САМО ако сертификатът е валиден */}
+          
           {result.isValid && (
             <button 
               onClick={downloadPDF}
@@ -127,7 +120,7 @@ function VerifyForm() {
       )}
 
       {/* ========================================== */}
-      {/* СКРИТ ДИЗАЙН ЗА PDF ЕКСПОРТ                */}
+      {/* ОПТИМИЗИРАН СКРИТ ДИЗАЙН ЗА PDF           */}
       {/* ========================================== */}
       <div style={{ position: 'absolute', top: '-10000px', left: '-10000px' }}>
         {result && result.isValid && (
@@ -138,7 +131,7 @@ function VerifyForm() {
               height: '210mm',
               backgroundColor: '#faf9f6',
               boxSizing: 'border-box',
-              padding: '15mm',
+              padding: '10mm', // Намален padding за повече място
               position: 'relative',
               fontFamily: '"Georgia", "Times New Roman", serif',
               color: '#102a43'
@@ -146,12 +139,13 @@ function VerifyForm() {
           >
             <div style={{
               width: '100%', height: '100%', border: '12px solid #102a43',
-              boxSizing: 'border-box', padding: '8mm', position: 'relative'
+              boxSizing: 'border-box', padding: '5mm', position: 'relative'
             }}>
               <div style={{
                 width: '100%', height: '100%', border: '3px solid #d4af37',
                 boxSizing: 'border-box', display: 'flex', flexDirection: 'column',
-                justifyContent: 'space-between', alignItems: 'center', padding: '40px 60px'
+                justifyContent: 'space-between', alignItems: 'center', 
+                padding: '30px 60px 40px 60px' // Увеличен долен padding (40px)
               }}>
                 
                 <div style={{ textAlign: 'center' }}>
@@ -162,21 +156,27 @@ function VerifyForm() {
                 </div>
 
                 <div style={{ textAlign: 'center' }}>
-                  <h1 style={{ margin: '0 0 20px 0', fontSize: '65px', color: '#102a43', letterSpacing: '5px' }}>СЕРТИФИКАТ</h1>
+                  <h1 style={{ margin: '0 0 10px 0', fontSize: '65px', color: '#102a43', letterSpacing: '5px' }}>СЕРТИФИКАТ</h1>
                   <p style={{ fontSize: '22px', fontStyle: 'italic', color: '#486581' }}>Настоящият документ се издава на</p>
                   
-                  <h2 style={{ fontSize: '50px', margin: '20px 0', color: '#d4af37', fontWeight: 'bold' }}>
+                  <h2 style={{ fontSize: '50px', margin: '15px 0', color: '#d4af37', fontWeight: 'bold' }}>
                     {result.name}
                   </h2>
                   
                   <p style={{ fontSize: '22px', fontStyle: 'italic', color: '#486581' }}>за успешно завършено обучение по</p>
                   
-                  <h3 style={{ fontSize: '35px', margin: '20px 0', color: '#102a43' }}>
+                  <h3 style={{ fontSize: '35px', margin: '15px 0', color: '#102a43' }}>
                     {result.course}
                   </h3>
                 </div>
 
-                <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginTop: '30px' }}>
+                <div style={{ 
+                  width: '100%', 
+                  display: 'flex', 
+                  justifyContent: 'space-between', 
+                  alignItems: 'flex-end', 
+                  marginBottom: '10px' // Вдига секцията над рамката
+                }}>
                   <div style={{ textAlign: 'center', width: '250px' }}>
                     <p style={{ fontSize: '20px', margin: '0 0 10px 0' }}>{result.date}</p>
                     <div style={{ width: '100%', borderBottom: '2px solid #102a43', marginBottom: '5px' }}></div>
@@ -185,11 +185,11 @@ function VerifyForm() {
 
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <div style={{ border: '4px solid #102a43', padding: '5px', backgroundColor: '#fff' }}>
-                      <QRCodeSVG value={certId} size={110} level="H" />
+                      <QRCodeSVG value={certId} size={100} level="H" />
                     </div>
                     <div style={{ textAlign: 'center', marginTop: '10px' }}>
                       <p style={{ fontSize: '12px', fontWeight: 'bold', color: '#102a43', margin: '0 0 3px 0' }}>VERIFIED ON EDUCHAIN</p>
-                      <p style={{ fontSize: '10px', color: '#627d98', margin: 0, maxWidth: '200px', wordWrap: 'break-word' }}>
+                      <p style={{ fontSize: '9px', color: '#627d98', margin: 0, maxWidth: '180px', wordWrap: 'break-word', lineHeight: '1.1' }}>
                         TX: {certId}
                       </p>
                     </div>
