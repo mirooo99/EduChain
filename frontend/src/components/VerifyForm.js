@@ -163,7 +163,7 @@ function VerifyForm() {
                     {result.name}
                   </h2>
                   
-                  <p style={{ fontSize: '22px', fontStyle: 'italic', color: '#486581' }}>за получено отличие</p>
+                  <p style={{ fontSize: '22px', fontStyle: 'italic', color: '#486581' }}>за постигнато отличие</p>
                   
                   <h3 style={{ fontSize: '35px', margin: '15px 0', color: '#102a43' }}>
                     {result.course}
