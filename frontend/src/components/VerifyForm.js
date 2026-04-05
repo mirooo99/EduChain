@@ -11,6 +11,14 @@ function VerifyForm() {
   const [loading, setLoading] = useState(false);
   const certificateRef = useRef(null);
 
+  // Функция за генериране на LinkedIn линк за споделяне
+  const getLinkedInLink = () => {
+    if (!result) return "#";
+    const baseUrl = "https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME";
+    const params = `&name=${encodeURIComponent(result.course)}&organizationName=${encodeURIComponent("Технологично Училище 'Електронни Системи'")}&certId=${certId}`;
+    return baseUrl + params;
+  };
+
   const handleVerify = async (e) => {
     e.preventDefault();
     setError('');
@@ -100,53 +108,53 @@ function VerifyForm() {
           )}
           <p><strong>Ученик:</strong> {result.name}</p>
           <p><strong>Постижение:</strong> {result.course}</p>
-          <p><strong>Дата на издаване:</strong> {result.date}</p>
+          
+          {/* Форматиране на датата в интерфейса */}
+          <p><strong>Дата на издаване:</strong> {result.date.includes('-') ? result.date.split('-').reverse().join('.') : result.date}</p>
+          
           <p><strong>Статус:</strong> {result.isValid ? "Активен" : "Невалиден / Оттеглен"}</p>
-          <hr />
+          
+          {/* Etherscan Link */}
+          <p style={{marginTop: '10px'}}>
+             <a href={`https://sepolia.etherscan.io/tx/${certId}`} target="_blank" rel="noreferrer" style={{color: '#0052cc', fontSize: '0.9rem'}}>
+               🔍 Виж блокчейн транзакцията
+             </a>
+          </p>
+
+          <hr style={{ margin: '15px 0' }} />
           
           {result.isValid && (
-            <button 
-              onClick={downloadPDF}
-              disabled={loading}
-              style={{
-                width: '100%', padding: '12px', backgroundColor: '#28a745', color: 'white', 
-                border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold', fontSize: '1rem'
-              }}
-            >
-              {loading ? 'Генериране...' : '📥 Изтегли PDF Грамота'}
-            </button>
+            <div style={{ display: 'flex', gap: '10px', flexDirection: 'column' }}>
+              <button 
+                onClick={downloadPDF}
+                disabled={loading}
+                style={{ width: '100%', padding: '12px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold', fontSize: '1rem' }}
+              >
+                {loading ? 'Генериране...' : '📥 Изтегли PDF Грамота'}
+              </button>
+
+              {/* LinkedIn Share */}
+              <a 
+                href={getLinkedInLink()} 
+                target="_blank" 
+                rel="noreferrer" 
+                style={{ width: '100%', padding: '12px', backgroundColor: '#0077b5', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold', fontSize: '1rem', textAlign: 'center', textDecoration: 'none', boxSizing: 'border-box' }}
+              >
+                💙 Добави в LinkedIn Профил
+              </a>
+            </div>
           )}
         </div>
       )}
 
-      {/* ========================================== */}
-      {/* ОПТИМИЗИРАН СКРИТ ДИЗАЙН ЗА PDF           */}
-      {/* ========================================== */}
       <div style={{ position: 'absolute', top: '-10000px', left: '-10000px' }}>
         {result && result.isValid && (
           <div 
             ref={certificateRef} 
-            style={{
-              width: '297mm',
-              height: '210mm',
-              backgroundColor: '#faf9f6',
-              boxSizing: 'border-box',
-              padding: '10mm',
-              position: 'relative',
-              fontFamily: '"Georgia", "Times New Roman", serif',
-              color: '#102a43'
-            }}
+            style={{ width: '297mm', height: '210mm', backgroundColor: '#faf9f6', boxSizing: 'border-box', padding: '10mm', position: 'relative', fontFamily: '"Georgia", "Times New Roman", serif', color: '#102a43' }}
           >
-            <div style={{
-              width: '100%', height: '100%', border: '12px solid #102a43',
-              boxSizing: 'border-box', padding: '5mm', position: 'relative'
-            }}>
-              <div style={{
-                width: '100%', height: '100%', border: '3px solid #d4af37',
-                boxSizing: 'border-box', display: 'flex', flexDirection: 'column',
-                justifyContent: 'space-between', alignItems: 'center', 
-                padding: '30px 60px 40px 60px'
-              }}>
+            <div style={{ width: '100%', height: '100%', border: '12px solid #102a43', boxSizing: 'border-box', padding: '5mm', position: 'relative' }}>
+              <div style={{ width: '100%', height: '100%', border: '3px solid #d4af37', boxSizing: 'border-box', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center', padding: '30px 60px 40px 60px' }}>
                 
                 <div style={{ textAlign: 'center' }}>
                   <h2 style={{ margin: 0, fontSize: '24px', color: '#627d98', letterSpacing: '2px', textTransform: 'uppercase' }}>
@@ -158,27 +166,15 @@ function VerifyForm() {
                 <div style={{ textAlign: 'center' }}>
                   <h1 style={{ margin: '0 0 10px 0', fontSize: '65px', color: '#102a43', letterSpacing: '5px' }}>СЕРТИФИКАТ</h1>
                   <p style={{ fontSize: '22px', fontStyle: 'italic', color: '#486581' }}>Настоящият документ се издава на</p>
-                  
-                  <h2 style={{ fontSize: '50px', margin: '15px 0', color: '#d4af37', fontWeight: 'bold' }}>
-                    {result.name}
-                  </h2>
-                  
+                  <h2 style={{ fontSize: '50px', margin: '15px 0', color: '#d4af37', fontWeight: 'bold' }}>{result.name}</h2>
                   <p style={{ fontSize: '22px', fontStyle: 'italic', color: '#486581' }}>за постигнато отличие</p>
-                  
-                  <h3 style={{ fontSize: '35px', margin: '15px 0', color: '#102a43' }}>
-                    {result.course}
-                  </h3>
+                  <h3 style={{ fontSize: '35px', margin: '15px 0', color: '#102a43' }}>{result.course}</h3>
                 </div>
 
-                <div style={{ 
-                  width: '100%', 
-                  display: 'flex', 
-                  justifyContent: 'space-between', 
-                  alignItems: 'flex-end', 
-                  marginBottom: '10px'
-                }}>
+                <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '10px' }}>
                   <div style={{ textAlign: 'center', width: '250px' }}>
-                    <p style={{ fontSize: '20px', margin: '0 0 10px 0' }}>{result.date}</p>
+                    {/* Форматиране на датата в PDF */}
+                    <p style={{ fontSize: '20px', margin: '0 0 10px 0' }}>{result.date.includes('-') ? result.date.split('-').reverse().join('.') : result.date}</p>
                     <div style={{ width: '100%', borderBottom: '2px solid #102a43', marginBottom: '5px' }}></div>
                     <p style={{ fontSize: '16px', color: '#486581', margin: 0 }}>Дата на издаване</p>
                   </div>
@@ -189,9 +185,7 @@ function VerifyForm() {
                     </div>
                     <div style={{ textAlign: 'center', marginTop: '10px' }}>
                       <p style={{ fontSize: '12px', fontWeight: 'bold', color: '#102a43', margin: '0 0 3px 0' }}>VERIFIED ON EDUCHAIN</p>
-                      <p style={{ fontSize: '9px', color: '#627d98', margin: 0, maxWidth: '180px', wordWrap: 'break-word', lineHeight: '1.1' }}>
-                        TX: {certId}
-                      </p>
+                      <p style={{ fontSize: '9px', color: '#627d98', margin: 0, maxWidth: '180px', wordWrap: 'break-word', lineHeight: '1.1' }}>TX: {certId}</p>
                     </div>
                   </div>
                 </div>
