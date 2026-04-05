@@ -26,13 +26,27 @@ function VerifyForm() {
 
     try {
       const contract = await getContract();
+      // 1. Вземаме данните от смарт контракта
       const data = await contract.verifyCertificate(certId);
       
+      // 2. Вземаме информация за транзакцията и часа (Block Timestamp)
+      let formattedTime = "";
+      try {
+        const txReceipt = await contract.provider.getTransactionReceipt(certId);
+        if (txReceipt) {
+          const block = await contract.provider.getBlock(txReceipt.blockNumber);
+          formattedTime = new Date(block.timestamp * 1000).toLocaleTimeString('bg-BG');
+        }
+      } catch (tErr) {
+        console.log("Времето не можа да бъде извлечено", tErr);
+      }
+
       setResult({
         name: data[0],
         course: data[1],
         date: data[2],
-        isValid: data[3]
+        isValid: data[3],
+        time: formattedTime
       });
     } catch (err) {
       console.error(err);
@@ -72,7 +86,7 @@ function VerifyForm() {
   return (
     <div style={{ padding: '20px', backgroundColor: 'white', borderRadius: '8px' }}>
       <h2>Проверка на автентичност</h2>
-      <p style={{ fontSize: '0.9em', color: '#666' }}>Въведете уникалния хеш код, за да потвърдите данните в блокчейна на Sepolia.</p>
+      <p style={{ fontSize: '0.9em', color: '#666' }}>Въведете уникалния хеш код (Transaction Hash), за да потвърдите данните в блокчейна.</p>
       
       <form onSubmit={handleVerify} style={{ display: 'flex', flexDirection: 'column' }}>
         <input 
@@ -110,7 +124,22 @@ function VerifyForm() {
           
           <p><strong>Дата на издаване:</strong> {result.date.includes('-') ? result.date.split('-').reverse().join('.') : result.date}</p>
           
+          {/* ПОКАЗВАНЕ НА ЧАСА */}
+          {result.time && <p><strong>Точен час в блокчейна:</strong> {result.time} ч.</p>}
+          
           <p><strong>Статус:</strong> {result.isValid ? "Активен" : "Невалиден / Оттеглен"}</p>
+          
+          {/* ВРЪЗКА КЪМ КОНТРАКТА В ETHERSCAN */}
+          <p style={{marginTop: '10px'}}>
+             <a 
+               href={`https://sepolia.etherscan.io/address/0x4E8364aB888a4E7F299DcB3a383C4380DeA7aaA6#readContract`} 
+               target="_blank" 
+               rel="noreferrer" 
+               style={{color: '#0052cc', fontSize: '0.9rem', fontWeight: 'bold'}}
+             >
+               🔍 Виж записа в Smart Contract
+             </a>
+          </p>
 
           <hr style={{ margin: '15px 0' }} />
           
@@ -137,6 +166,7 @@ function VerifyForm() {
         </div>
       )}
 
+      {/* Скрит компонент за PDF генериране */}
       <div style={{ position: 'absolute', top: '-10000px', left: '-10000px' }}>
         {result && result.isValid && (
           <div 
@@ -166,6 +196,7 @@ function VerifyForm() {
                     <p style={{ fontSize: '20px', margin: '0 0 10px 0' }}>{result.date.includes('-') ? result.date.split('-').reverse().join('.') : result.date}</p>
                     <div style={{ width: '100%', borderBottom: '2px solid #102a43', marginBottom: '5px' }}></div>
                     <p style={{ fontSize: '16px', color: '#486581', margin: 0 }}>Дата на издаване</p>
+                    {result.time && <p style={{fontSize: '12px', color: '#486581', marginTop: '5px'}}>Час: {result.time}</p>}
                   </div>
 
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -174,7 +205,7 @@ function VerifyForm() {
                     </div>
                     <div style={{ textAlign: 'center', marginTop: '10px' }}>
                       <p style={{ fontSize: '12px', fontWeight: 'bold', color: '#102a43', margin: '0 0 3px 0' }}>VERIFIED ON EDUCHAIN</p>
-                      <p style={{ fontSize: '9px', color: '#627d98', margin: 0, maxWidth: '180px', wordWrap: 'break-word', lineHeight: '1.1' }}>TX: {certId}</p>
+                      <p style={{ fontSize: '9px', color: '#627d98', margin: 0, maxWidth: '180px', wordWrap: 'break-word', lineHeight: '1.1' }}>ID: {certId}</p>
                     </div>
                   </div>
                 </div>
