@@ -16,6 +16,13 @@ function IssueForm() {
   const [loading, setLoading] = useState(false);
   const certificateRef = useRef(null);
 
+  // Функция за генериране на LinkedIn линк
+  const getLinkedInLink = () => {
+    const baseUrl = "https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME";
+    const params = `&name=${encodeURIComponent(course)}&organizationName=${encodeURIComponent("Технологично Училище 'Електронни Системи'")}&certId=${certHash}`;
+    return baseUrl + params;
+  };
+
   const handleIssue = async (e) => {
     e.preventDefault();
     setCertHash('');
@@ -49,6 +56,7 @@ function IssueForm() {
       setLoading(false);
     }
   };
+
   const downloadPDF = async () => {
     if (!certificateRef.current) return;
     setStatus('Генериране на PDF...');
@@ -93,23 +101,25 @@ function IssueForm() {
     }
   };
 
-  const handleRevoke = async () => {
+  const handleRevokeWithConfirmation = async () => {
     if (!revokeId) return;
-    try {
-      setStatus('Анулиране...');
-      const contract = await getContract();
-      const tx = await contract.revokeCertificate(revokeId);
-      await tx.wait();
-      setStatus('⚠️ Сертификатът е анулиран успешно!');
-    } catch (error) {
-      setStatus('❌ Грешка при анулиране.');
+    // Добавен изскачащ прозорец (Modal) за сигурност
+    if (window.confirm("⚠️ ВНИМАНИЕ: Това действие е необратимо и ще бъде записано вечно в блокчейна! Сигурни ли сте, че искате да анулирате сертификата?")) {
+      try {
+        setStatus('Анулиране...');
+        const contract = await getContract();
+        const tx = await contract.revokeCertificate(revokeId);
+        await tx.wait();
+        setStatus('⚠️ Сертификатът е анулиран успешно!');
+      } catch (error) {
+        setStatus('❌ Грешка при анулиране.');
+      }
     }
   };
 
   return (
     <div style={{ padding: '20px', backgroundColor: 'white', borderRadius: '8px', display: 'flex', flexDirection: 'column', gap: '25px' }}>
 
-      {/* СЕКЦИЯ: ИЗДАВАНЕ */}
       <section>
         <h2>Издаване на сертификат</h2>
         <form onSubmit={handleIssue} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -124,22 +134,31 @@ function IssueForm() {
         {certHash && (
           <div style={{ marginTop: '20px', padding: '15px', background: '#f8fff9', border: '2px solid #28a745', borderRadius: '5px' }}>
             <p style={{ color: '#28a745', fontWeight: 'bold', margin: '0 0 10px 0' }}>✅ Успех!</p>
-            <p style={{ fontSize: '0.9rem' }}><strong>Hash ID:</strong> <code style={{ wordBreak: 'break-all' }}>{certHash}</code></p>
+            
+            {/* Добавен Etherscan линк */}
+            <p style={{ fontSize: '0.9rem', marginBottom: '15px' }}>
+              <strong>Hash ID:</strong> <br/>
+              <a href={`https://sepolia.etherscan.io/tx/${certHash}`} target="_blank" rel="noreferrer" style={{color: '#0052cc', wordBreak: 'break-all'}}>
+                {certHash} (Виж в Etherscan)
+              </a>
+            </p>
 
-            {/* БУТОН ЗА PDF */}
-            <button 
-              onClick={downloadPDF} 
-              style={{ width: '100%', marginTop: '10px', padding: '10px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold' }}
-            >
-              📥 Изтегли PDF Грамота
-            </button>
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <button onClick={downloadPDF} style={{ flex: 1, padding: '10px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold' }}>
+                📥 Изтегли PDF
+              </button>
+              
+              {/* Добавен LinkedIn бутон */}
+              <a href={getLinkedInLink()} target="_blank" rel="noreferrer" style={{ flex: 1, padding: '10px', backgroundColor: '#0077b5', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold', textAlign: 'center', textDecoration: 'none', boxSizing: 'border-box' }}>
+                💙 Добави в LinkedIn
+              </a>
+            </div>
           </div>
         )}
       </section>
 
       <hr />
 
-      {/* СЕКЦИЯ: АДМИНИ */}
       <section>
         <h3>Управление на екипа (Админи)</h3>
         <input type="text" placeholder="0x Адрес" value={newAdminAddr} onChange={(e) => setNewAdminAddr(e.target.value)} style={{width: '100%', padding: '8px', boxSizing: 'border-box'}} />
@@ -149,48 +168,26 @@ function IssueForm() {
         </div>
       </section>
 
-      {/* СЕКЦИЯ: АНУЛИРАНЕ */}
       <section>
         <h3>Анулиране на документ</h3>
         <input type="text" placeholder="Hash ID за анулиране" value={revokeId} onChange={(e) => setRevokeId(e.target.value)} style={{width: '100%', padding: '8px', boxSizing: 'border-box'}} />
-        <button onClick={handleRevoke} style={{ width: '100%', marginTop: '10px', backgroundColor: '#dc3545', color: 'white', padding: '8px', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>Анулирай Сертификат</button>
+        <button onClick={handleRevokeWithConfirmation} style={{ width: '100%', marginTop: '10px', backgroundColor: '#dc3545', color: 'white', padding: '8px', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>Анулирай Сертификат</button>
       </section>
 
-      {/* СТАТУС БАР */}
       {status && (
         <div style={{ padding: '12px', borderLeft: '4px solid #007bff', background: '#f0f7ff', fontWeight: '500', fontSize: '0.9rem' }}>
           {status}
         </div>
       )}
 
-      {/* ========================================== */}
-      {/* СКРИТ ДИЗАЙН ЗА PDF (С ФИКСИРАНА РАМКА)    */}
-      {/* ========================================== */}
       <div style={{ position: 'absolute', top: '-10000px', left: '-10000px' }}>
         {certHash && (
           <div 
             ref={certificateRef} 
-            style={{
-              width: '297mm',
-              height: '210mm',
-              backgroundColor: '#faf9f6',
-              boxSizing: 'border-box',
-              padding: '10mm',
-              position: 'relative',
-              fontFamily: '"Georgia", "Times New Roman", serif',
-              color: '#102a43'
-            }}
+            style={{ width: '297mm', height: '210mm', backgroundColor: '#faf9f6', boxSizing: 'border-box', padding: '10mm', position: 'relative', fontFamily: '"Georgia", "Times New Roman", serif', color: '#102a43' }}
           >
-            <div style={{
-              width: '100%', height: '100%', border: '12px solid #102a43',
-              boxSizing: 'border-box', padding: '5mm', position: 'relative'
-            }}>
-              <div style={{
-                width: '100%', height: '100%', border: '3px solid #d4af37',
-                boxSizing: 'border-box', display: 'flex', flexDirection: 'column',
-                justifyContent: 'space-between', alignItems: 'center', 
-                padding: '30px 60px 40px 60px' 
-              }}>
+            <div style={{ width: '100%', height: '100%', border: '12px solid #102a43', boxSizing: 'border-box', padding: '5mm', position: 'relative' }}>
+              <div style={{ width: '100%', height: '100%', border: '3px solid #d4af37', boxSizing: 'border-box', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center', padding: '30px 60px 40px 60px' }}>
                 <div style={{ textAlign: 'center' }}>
                   <h2 style={{ margin: 0, fontSize: '24px', color: '#627d98', letterSpacing: '2px', textTransform: 'uppercase' }}>
                     Технологично Училище "Електронни Системи"
@@ -208,7 +205,8 @@ function IssueForm() {
 
                 <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '10px' }}>
                   <div style={{ textAlign: 'center', width: '250px' }}>
-                    <p style={{ fontSize: '20px', margin: '0 0 10px 0' }}>{date}</p>
+                    {/* Форматиране на датата в PDF */}
+                    <p style={{ fontSize: '20px', margin: '0 0 10px 0' }}>{date ? date.split('-').reverse().join('.') : ''}</p>
                     <div style={{ width: '100%', borderBottom: '2px solid #102a43', marginBottom: '5px' }}></div>
                     <p style={{ fontSize: '16px', color: '#486581', margin: 0 }}>Дата на издаване</p>
                   </div>
@@ -219,9 +217,7 @@ function IssueForm() {
                     </div>
                     <div style={{ textAlign: 'center', marginTop: '10px' }}>
                       <p style={{ fontSize: '12px', fontWeight: 'bold', color: '#102a43', margin: '0 0 3px 0' }}>VERIFIED ON EDUCHAIN</p>
-                      <p style={{ fontSize: '9px', color: '#627d98', margin: 0, maxWidth: '180px', wordWrap: 'break-word', lineHeight: '1.1' }}>
-                        TX: {certHash}
-                      </p>
+                      <p style={{ fontSize: '9px', color: '#627d98', margin: 0, maxWidth: '180px', wordWrap: 'break-word', lineHeight: '1.1' }}>TX: {certHash}</p>
                     </div>
                   </div>
                 </div>
