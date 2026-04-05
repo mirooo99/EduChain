@@ -136,12 +136,19 @@ function IssueForm() {
             <p style={{ color: '#28a745', fontWeight: 'bold', margin: '0 0 10px 0' }}>✅ Успех!</p>
             
             {/* Добавен Etherscan линк */}
-            <p style={{ fontSize: '0.9rem', marginBottom: '15px' }}>
-              <strong>Hash ID:</strong> <br/>
-              <a href={`https://sepolia.etherscan.io/tx/${certHash}`} target="_blank" rel="noreferrer" style={{color: '#0052cc', wordBreak: 'break-all'}}>
-                {certHash} (Виж в Etherscan)
-              </a>
-            </p>
+           <p style={{ fontSize: '0.9rem', marginBottom: '15px', color: '#333' }}>
+  <strong>Hash ID:</strong> <br/>
+  <span style={{ wordBreak: 'break-all' }}>{certHash}</span> 
+  {" "}
+  <a 
+    href={`https://sepolia.etherscan.io/tx/${certHash}`} 
+    target="_blank" 
+    rel="noreferrer" 
+    style={{ color: '#0052cc', textDecoration: 'underline', fontWeight: 'bold', marginLeft: '5px' }}
+  >
+    (Виж в Etherscan)
+  </a>
+</p>
 
             <div style={{ display: 'flex', gap: '10px' }}>
               <button onClick={downloadPDF} style={{ flex: 1, padding: '10px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold' }}>
