@@ -16,7 +16,6 @@ function IssueForm() {
   const [loading, setLoading] = useState(false);
   const certificateRef = useRef(null);
 
-  // Функция за генериране на LinkedIn линк
   const getLinkedInLink = () => {
     const baseUrl = "https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME";
     const params = `&name=${encodeURIComponent(course)}&organizationName=${encodeURIComponent("Технологично Училище 'Електронни Системи'")}&certId=${certHash}`;
@@ -103,7 +102,6 @@ function IssueForm() {
 
   const handleRevokeWithConfirmation = async () => {
     if (!revokeId) return;
-    // Добавен изскачащ прозорец (Modal) за сигурност
     if (window.confirm("⚠️ ВНИМАНИЕ: Това действие е необратимо и ще бъде записано вечно в блокчейна! Сигурни ли сте, че искате да анулирате сертификата?")) {
       try {
         setStatus('Анулиране...');
@@ -142,7 +140,6 @@ function IssueForm() {
                 📥 Изтегли PDF
               </button>
               
-              {/* Добавен LinkedIn бутон */}
               <a href={getLinkedInLink()} target="_blank" rel="noreferrer" style={{ flex: 1, padding: '10px', backgroundColor: '#0077b5', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold', textAlign: 'center', textDecoration: 'none', boxSizing: 'border-box' }}>
                 💙 Добави в LinkedIn
               </a>
@@ -165,7 +162,6 @@ function IssueForm() {
       <section>
         <h3>Анулиране на документ</h3>
         <input type="text" placeholder="Hash ID за анулиране" value={revokeId} onChange={(e) => setRevokeId(e.target.value)} style={{width: '100%', padding: '8px', boxSizing: 'border-box'}} />
-        {/* Заменен с функцията с потвърждение */}
         <button onClick={handleRevokeWithConfirmation} style={{ width: '100%', marginTop: '10px', backgroundColor: '#dc3545', color: 'white', padding: '8px', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>Анулирай Сертификат</button>
       </section>
 
@@ -200,7 +196,6 @@ function IssueForm() {
 
                 <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '10px' }}>
                   <div style={{ textAlign: 'center', width: '250px' }}>
-                    {/* Форматиране на датата в PDF */}
                     <p style={{ fontSize: '20px', margin: '0 0 10px 0' }}>{date ? date.split('-').reverse().join('.') : ''}</p>
                     <div style={{ width: '100%', borderBottom: '2px solid #102a43', marginBottom: '5px' }}></div>
                     <p style={{ fontSize: '16px', color: '#486581', margin: 0 }}>Дата на издаване</p>
