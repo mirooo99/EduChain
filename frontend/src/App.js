@@ -32,7 +32,7 @@ function App() {
           className="nav-button active" 
           style={{ background: account ? '#10b981' : '#4f46e5', marginLeft: '15px', color: 'white', border: 'none', padding: '10px 20px', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}
         >
-          {account ? `${account.substring(0, 6)}...${account.substring(account.length - 4)}` : "🔌 Свържи Портфейл"}
+          {account ? `${account.substring(0, 6)}...${account.substring(account.length - 4)}` : "Свържи Портфейл"}
         </button>
       </div>
       
@@ -57,7 +57,7 @@ function App() {
         ) : (
           account ? <IssueForm /> : (
             <div style={{textAlign: 'center', padding: '40px'}}>
-              <h3 style={{ color: '#4f46e5' }}>🔒 Достъпът е ограничен</h3>
+              <h3 style={{ color: '#4f46e5' }}>Достъпът е ограничен</h3>
               <p style={{ color: '#666' }}>Моля, свържете портфейла си (бутона горе вдясно), за да управлявате сертификати.</p>
             </div>
           )
