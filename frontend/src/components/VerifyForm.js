@@ -113,13 +113,6 @@ function VerifyForm() {
           <p><strong>Дата на издаване:</strong> {result.date.includes('-') ? result.date.split('-').reverse().join('.') : result.date}</p>
           
           <p><strong>Статус:</strong> {result.isValid ? "Активен" : "Невалиден / Оттеглен"}</p>
-          
-          {/* Etherscan Link */}
-          <p style={{marginTop: '10px'}}>
-             <a href={`https://sepolia.etherscan.io/tx/${certId}`} target="_blank" rel="noreferrer" style={{color: '#0052cc', fontSize: '0.9rem'}}>
-               🔍 Виж блокчейн транзакцията
-             </a>
-          </p>
 
           <hr style={{ margin: '15px 0' }} />
           
