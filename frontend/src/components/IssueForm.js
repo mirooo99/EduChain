@@ -46,11 +46,11 @@ function IssueForm() {
         const parsedLog = contract.interface.parseLog(log);
         const generatedId = parsedLog.args[0];
         setCertHash(generatedId);
-        setStatus('✅ Успешно издаден сертификат!');
+        setStatus('Успешно издаден сертификат!');
       }
     } catch (error) {
       console.error(error);
-      setStatus('❌ Грешка. Уверете се, че сте Админ и имате Sepolia ETH.');
+      setStatus('Грешка. Уверете се, че сте Админ и имате Sepolia ETH.');
     } finally {
       setLoading(false);
     }
@@ -76,10 +76,10 @@ function IssueForm() {
 
       pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
       pdf.save(`EduChain_New_Certificate_${name}.pdf`);
-      setStatus('✅ PDF документът е изтеглен!');
+      setStatus('PDF документът е изтеглен!');
     } catch (err) {
       console.error("Грешка при PDF:", err);
-      setStatus('❌ Грешка при генериране на PDF.');
+      setStatus('Грешка при генериране на PDF.');
     }
   };
 
@@ -93,24 +93,24 @@ function IssueForm() {
         : await contract.removeAdmin(newAdminAddr);
 
       await tx.wait();
-      setStatus('✅ Списъкът с админи е обновен!');
+      setStatus('Списъкът с админи е обновен!');
     } catch (error) {
       console.error(error);
-      setStatus('❌ Грешка: Само съществуващ Админ може да добавя други.');
+      setStatus('Грешка: Само съществуващ Админ може да добавя други.');
     }
   };
 
   const handleRevokeWithConfirmation = async () => {
     if (!revokeId) return;
-    if (window.confirm("⚠️ ВНИМАНИЕ: Това действие е необратимо и ще бъде записано вечно в блокчейна! Сигурни ли сте, че искате да анулирате сертификата?")) {
+    if (window.confirm("ВНИМАНИЕ: Това действие е необратимо и ще бъде записано вечно в блокчейна! Сигурни ли сте, че искате да анулирате сертификата?")) {
       try {
         setStatus('Анулиране...');
         const contract = await getContract();
         const tx = await contract.revokeCertificate(revokeId);
         await tx.wait();
-        setStatus('⚠️ Сертификатът е анулиран успешно!');
+        setStatus('Сертификатът е анулиран успешно!');
       } catch (error) {
-        setStatus('❌ Грешка при анулиране.');
+        setStatus('Грешка при анулиране.');
       }
     }
   };
@@ -131,17 +131,17 @@ function IssueForm() {
 
         {certHash && (
           <div style={{ marginTop: '20px', padding: '15px', background: '#f8fff9', border: '2px solid #28a745', borderRadius: '5px' }}>
-            <p style={{ color: '#28a745', fontWeight: 'bold', margin: '0 0 10px 0' }}>✅ Успех!</p>
+            <p style={{ color: '#28a745', fontWeight: 'bold', margin: '0 0 10px 0' }}>Успех!</p>
             
             <p style={{ fontSize: '0.9rem' }}><strong>Hash ID:</strong> <code style={{ wordBreak: 'break-all' }}>{certHash}</code></p>
 
             <div style={{ display: 'flex', gap: '10px' }}>
               <button onClick={downloadPDF} style={{ flex: 1, padding: '10px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold' }}>
-                📥 Изтегли PDF
+                Изтегли PDF
               </button>
               
               <a href={getLinkedInLink()} target="_blank" rel="noreferrer" style={{ flex: 1, padding: '10px', backgroundColor: '#0077b5', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold', textAlign: 'center', textDecoration: 'none', boxSizing: 'border-box' }}>
-                💙 Добави в LinkedIn
+                Добави в LinkedIn
               </a>
             </div>
           </div>
