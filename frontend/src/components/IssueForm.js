@@ -116,7 +116,7 @@ function IssueForm() {
   };
 
   return (
-    <div dir="ltr" style={{ padding: '20px', backgroundColor: 'white', borderRadius: '8px', display: 'flex', flexDirection: 'column', gap: '25px', textAlign: 'left' }}>
+    <div dir="ltr" style={{ padding: '20px', backgroundColor: 'white', borderRadius: '8px', display: 'flex', flexDirection: 'column', gap: '25px' }}>
 
       <section>
         <h2>Издаване на сертификат</h2>
