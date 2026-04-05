@@ -11,7 +11,6 @@ function VerifyForm() {
   const [loading, setLoading] = useState(false);
   const certificateRef = useRef(null);
 
-  // Функция за генериране на LinkedIn линк за споделяне
   const getLinkedInLink = () => {
     if (!result) return "#";
     const baseUrl = "https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME";
@@ -37,7 +36,7 @@ function VerifyForm() {
       });
     } catch (err) {
       console.error(err);
-      setError('❌ Сертификатът не е намерен. Проверете дали Hash ID е правилен.');
+      setError('Сертификатът не е намерен. Проверете дали Hash ID е правилен.');
     } finally {
       setLoading(false);
     }
@@ -102,14 +101,13 @@ function VerifyForm() {
           backgroundColor: result.isValid ? '#f8fff9' : '#fff8f8' 
         }}>
           {result.isValid ? (
-            <h3 style={{ color: '#28a745', marginTop: 0 }}>✅ Валиден Сертификат!</h3>
+            <h3 style={{ color: '#28a745', marginTop: 0 }}>Валиден Сертификат!</h3>
           ) : (
-            <h3 style={{ color: '#dc3545', marginTop: 0 }}>🚫 АНУЛИРАН СЕРТИФИКАТ!</h3>
+            <h3 style={{ color: '#dc3545', marginTop: 0 }}>АНУЛИРАН СЕРТИФИКАТ!</h3>
           )}
           <p><strong>Ученик:</strong> {result.name}</p>
           <p><strong>Постижение:</strong> {result.course}</p>
           
-          {/* Форматиране на датата в интерфейса */}
           <p><strong>Дата на издаване:</strong> {result.date.includes('-') ? result.date.split('-').reverse().join('.') : result.date}</p>
           
           <p><strong>Статус:</strong> {result.isValid ? "Активен" : "Невалиден / Оттеглен"}</p>
@@ -123,17 +121,16 @@ function VerifyForm() {
                 disabled={loading}
                 style={{ width: '100%', padding: '12px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold', fontSize: '1rem' }}
               >
-                {loading ? 'Генериране...' : '📥 Изтегли PDF Грамота'}
+                {loading ? 'Генериране...' : 'Изтегли PDF Грамота'}
               </button>
 
-              {/* LinkedIn Share */}
               <a 
                 href={getLinkedInLink()} 
                 target="_blank" 
                 rel="noreferrer" 
                 style={{ width: '100%', padding: '12px', backgroundColor: '#0077b5', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold', fontSize: '1rem', textAlign: 'center', textDecoration: 'none', boxSizing: 'border-box' }}
               >
-                💙 Добави в LinkedIn Профил
+                Добави в LinkedIn Профил
               </a>
             </div>
           )}
@@ -166,7 +163,6 @@ function VerifyForm() {
 
                 <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '10px' }}>
                   <div style={{ textAlign: 'center', width: '250px' }}>
-                    {/* Форматиране на датата в PDF */}
                     <p style={{ fontSize: '20px', margin: '0 0 10px 0' }}>{result.date.includes('-') ? result.date.split('-').reverse().join('.') : result.date}</p>
                     <div style={{ width: '100%', borderBottom: '2px solid #102a43', marginBottom: '5px' }}></div>
                     <p style={{ fontSize: '16px', color: '#486581', margin: 0 }}>Дата на издаване</p>
