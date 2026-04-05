@@ -8,7 +8,6 @@ function App() {
   const [view, setView] = useState('verify');
   const [account, setAccount] = useState(null);
 
-  // Функция за свързване с MetaMask
   const connectWallet = async () => {
     if (window.ethereum) {
       try {
@@ -24,7 +23,6 @@ function App() {
 
   return (
     <div className="container">
-      {/* Добавяме горен ред за Header и Wallet бутона */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <div style={{ flex: 1 }}>
           <Header />
@@ -54,7 +52,6 @@ function App() {
       </div>
 
       <div className="main-card">
-        {/* Защитаваме IssueForm - показва се само ако има account */}
         {view === 'verify' ? (
           <VerifyForm />
         ) : (
