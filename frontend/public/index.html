@@ -5,25 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <title>EduChain | Blockchain Verification</title>
-    
     <meta name="description" content="Децентрализирана платформа за верификация на сертификати в Ethereum, създадена от Мирослав Радуканов." />
-    
-    <meta http-equiv="Content-Language" content="bg">
-
     <style>
       body { font-family: Arial, sans-serif; background-color: #f4f4f9; margin: 0; padding: 0; }
-      .container { max-width: 800px; margin: 0 auto; padding: 20px; }
-      input, button { padding: 10px; margin: 5px 0; border-radius: 5px; border: 1px solid #ccc; }
-      button { background-color: #007bff; color: white; cursor: pointer; border: none; }
-      button:hover { background-color: #0056b3; }
-
-      /* Тези два реда ще предотвратят разместване на интерфейса, ако браузърът реши да добави свои елементи */
-      .skiptranslate { display: none !important; }
+      
+      /* СКРИВАМЕ ГОРНАТА ЛЕНТА НА GOOGLE */
+      .goog-te-banner-frame.skiptranslate { display: none !important; }
       body { top: 0px !important; position: static !important; }
+      .goog-te-balloon-frame { display: none !important; }
+      .goog-text-highlight { background: none !important; box-shadow: none !important; }
     </style>
   </head>
   <body>
     <noscript>Трябва да включите JavaScript, за да стартирате това приложение.</noscript>
     <div id="root"></div>
+
+    <script type="text/javascript">
+      function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+          pageLanguage: 'bg',
+          includedLanguages: 'en,de,fr,es,it,ar', 
+          layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+          autoDisplay: false
+        }, 'google_translate_element');
+      }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
   </body>
 </html>
