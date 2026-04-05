@@ -11,7 +11,6 @@ function VerifyForm() {
   const [loading, setLoading] = useState(false);
   const certificateRef = useRef(null);
 
-  // Функция за генериране на LinkedIn линк за споделяне
   const getLinkedInLink = () => {
     if (!result) return "#";
     const baseUrl = "https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME";
@@ -109,7 +108,6 @@ function VerifyForm() {
           <p><strong>Ученик:</strong> {result.name}</p>
           <p><strong>Постижение:</strong> {result.course}</p>
           
-          {/* Форматиране на датата в интерфейса */}
           <p><strong>Дата на издаване:</strong> {result.date.includes('-') ? result.date.split('-').reverse().join('.') : result.date}</p>
           
           <p><strong>Статус:</strong> {result.isValid ? "Активен" : "Невалиден / Оттеглен"}</p>
@@ -126,7 +124,6 @@ function VerifyForm() {
                 {loading ? 'Генериране...' : '📥 Изтегли PDF Грамота'}
               </button>
 
-              {/* LinkedIn Share */}
               <a 
                 href={getLinkedInLink()} 
                 target="_blank" 
@@ -166,7 +163,6 @@ function VerifyForm() {
 
                 <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '10px' }}>
                   <div style={{ textAlign: 'center', width: '250px' }}>
-                    {/* Форматиране на датата в PDF */}
                     <p style={{ fontSize: '20px', margin: '0 0 10px 0' }}>{result.date.includes('-') ? result.date.split('-').reverse().join('.') : result.date}</p>
                     <div style={{ width: '100%', borderBottom: '2px solid #102a43', marginBottom: '5px' }}></div>
                     <p style={{ fontSize: '16px', color: '#486581', margin: 0 }}>Дата на издаване</p>
