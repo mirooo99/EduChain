@@ -1,7 +1,7 @@
 import hre from "hardhat";
 
 async function main() {
-  console.log("🚀 Deploying Certificate contract to Sepolia...");
+  console.log("Deploying Certificate contract to Sepolia...");
 
   const Certificate = await hre.ethers.getContractFactory("Certificate");
   
@@ -11,11 +11,11 @@ async function main() {
 
   const contractAddress = await certificate.getAddress();
 
-  console.log(`✅ Success! Certificate contract deployed to: ${contractAddress}`);
+  console.log(`Success! Certificate contract deployed to: ${contractAddress}`);
 }
 
 main().catch((error) => {
-  console.error("❌ Deployment failed:");
+  console.error("Deployment failed:");
   console.error(error);
   process.exitCode = 1;
 });
