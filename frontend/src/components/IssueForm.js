@@ -136,19 +136,12 @@ function IssueForm() {
             <p style={{ color: '#28a745', fontWeight: 'bold', margin: '0 0 10px 0' }}>✅ Успех!</p>
             
             {/* Добавен Etherscan линк */}
-           <p style={{ fontSize: '0.9rem', marginBottom: '15px', color: '#333' }}>
-  <strong>Hash ID:</strong> <br/>
-  <span style={{ wordBreak: 'break-all' }}>{certHash}</span> 
-  {" "}
-  <a 
-    href={`https://sepolia.etherscan.io/tx/${certHash}`} 
-    target="_blank" 
-    rel="noreferrer" 
-    style={{ color: '#0052cc', textDecoration: 'underline', fontWeight: 'bold', marginLeft: '5px' }}
-  >
-    (Виж в Etherscan)
-  </a>
-</p>
+            <p style={{ fontSize: '0.9rem', marginBottom: '15px' }}>
+              <strong>Hash ID:</strong> <br/>
+              <a href={`https://sepolia.etherscan.io/tx/${certHash}`} target="_blank" rel="noreferrer" style={{color: '#0052cc', wordBreak: 'break-all'}}>
+                {certHash} (Виж в Etherscan)
+              </a>
+            </p>
 
             <div style={{ display: 'flex', gap: '10px' }}>
               <button onClick={downloadPDF} style={{ flex: 1, padding: '10px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold' }}>
@@ -178,6 +171,7 @@ function IssueForm() {
       <section>
         <h3>Анулиране на документ</h3>
         <input type="text" placeholder="Hash ID за анулиране" value={revokeId} onChange={(e) => setRevokeId(e.target.value)} style={{width: '100%', padding: '8px', boxSizing: 'border-box'}} />
+        {/* Заменен с функцията с потвърждение */}
         <button onClick={handleRevokeWithConfirmation} style={{ width: '100%', marginTop: '10px', backgroundColor: '#dc3545', color: 'white', padding: '8px', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>Анулирай Сертификат</button>
       </section>
 
