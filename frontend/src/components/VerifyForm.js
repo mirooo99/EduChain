@@ -55,6 +55,9 @@ function VerifyForm() {
     if (hashFromUrl) {
       setCertId(hashFromUrl);
       verifyHash(hashFromUrl);
+
+      // 👉 маха hash от URL
+      window.history.replaceState({}, document.title, window.location.pathname);
     }
   }, [verifyHash]);
 
