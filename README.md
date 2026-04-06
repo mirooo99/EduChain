@@ -24,3 +24,6 @@ EduChain is a decentralized application (dApp) designed to issue and verify acad
 2. Navigate to `/blockchain` and run `npm install`
 3. Run local node: `npx hardhat node`
 4. Deploy contract: `npx hardhat run scripts/deploy.js --network localhost`
+
+## Test Certificates
+0xe5c1f497be00dbaf21bb04f54fd63e61160d9686840c092242a419ce38324972
