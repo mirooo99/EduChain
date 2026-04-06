@@ -188,7 +188,7 @@ const getLinkedInLink = () => {
         )}
       </section>
 
-      <hr />
+      <hr style={{ margin: '15px 0' }} />
 
       <section>
         <h3>Управление на екипа (Админи)</h3>
@@ -199,7 +199,7 @@ const getLinkedInLink = () => {
         </div>
       </section>
 
-      <hr />
+      <hr style={{ margin: '15px 0' }} />
           
       <section>
         <h3>Анулиране на документ</h3>
