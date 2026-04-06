@@ -199,7 +199,7 @@ const getLinkedInLink = () => {
         </div>
       </section>
 
-      <br>
+      <hr />
           
       <section>
         <h3>Анулиране на документ</h3>
