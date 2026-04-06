@@ -19,6 +19,7 @@ function VerifyForm() {
   };
 
   const handleVerify = useCallback(async (manualHash) => {
+    // Взимаме хеша или от подадения параметър (за автоматична проверка), или от стейта (за бутона)
     const hashToVerify = typeof manualHash === 'string' ? manualHash : certId;
     
     if (typeof manualHash !== 'string' && manualHash && manualHash.preventDefault) {
@@ -49,6 +50,7 @@ function VerifyForm() {
     }
   }, [certId]);
 
+  // Ефектът се изпълнява само веднъж при монтиране на компонента
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const hashFromUrl = urlParams.get('hash');
@@ -56,8 +58,9 @@ function VerifyForm() {
       setCertId(hashFromUrl);
       handleVerify(hashFromUrl);
     }
+    // Празен масив, за да не се презаписва при всяка промяна на полето
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); 
+  }, []);
 
   const downloadPDF = async () => {
     if (!certificateRef.current) return;
