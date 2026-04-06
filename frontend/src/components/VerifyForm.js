@@ -18,13 +18,7 @@ function VerifyForm() {
     return baseUrl + params;
   };
 
-  const handleVerify = useCallback(async (manualHash) => {
-    const hashToVerify = typeof manualHash === 'string' ? manualHash : certId;
-    
-    if (typeof manualHash !== 'string' && manualHash.preventDefault) {
-      manualHash.preventDefault();
-    }
-
+  const verifyHash = useCallback(async (hashToVerify) => {
     if (!hashToVerify) return;
 
     setError('');
@@ -34,7 +28,7 @@ function VerifyForm() {
     try {
       const contract = await getContract();
       const data = await contract.verifyCertificate(hashToVerify);
-      
+
       setResult({
         name: data[0],
         course: data[1],
@@ -47,23 +41,27 @@ function VerifyForm() {
     } finally {
       setLoading(false);
     }
-  }, [certId]);
+  }, []);
 
-  // КОРЕКЦИЯ: Изпълнява се само веднъж при mount
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    verifyHash(certId);
+  };
+
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const hashFromUrl = urlParams.get('hash');
+
     if (hashFromUrl) {
       setCertId(hashFromUrl);
-      handleVerify(hashFromUrl);
+      verifyHash(hashFromUrl);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); 
+  }, [verifyHash]);
 
   const downloadPDF = async () => {
     if (!certificateRef.current) return;
     setLoading(true);
-    
+
     try {
       const element = certificateRef.current;
       const canvas = await html2canvas(element, { 
@@ -71,13 +69,13 @@ function VerifyForm() {
         useCORS: true,
         logging: false
       });
-      
+
       const imgData = canvas.toDataURL('image/png');
       const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
 
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-      
+
       pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
       pdf.save(`EduChain_Certificate_${result.name}.pdf`);
     } catch (err) {
@@ -91,8 +89,8 @@ function VerifyForm() {
     <div style={{ padding: '20px', backgroundColor: 'white', borderRadius: '8px' }}>
       <h2>Проверка на автентичност</h2>
       <p style={{ fontSize: '0.9em', color: '#666' }}>Въведете уникалния хеш код, за да потвърдите данните в блокчейна на Sepolia.</p>
-      
-      <form onSubmit={handleVerify} style={{ display: 'flex', flexDirection: 'column' }}>
+
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column' }}>
         <input 
           type="text" 
           placeholder="0x..." 
@@ -109,9 +107,9 @@ function VerifyForm() {
           {loading ? 'Зареждане...' : 'Провери'}
         </button>
       </form>
-      
+
       {error && <p style={{ color: 'red', marginTop: '10px' }}>{error}</p>}
-      
+
       {result && (
         <div style={{ 
           marginTop: '20px', padding: '15px', borderRadius: '5px',
@@ -125,13 +123,11 @@ function VerifyForm() {
           )}
           <p><strong>Ученик:</strong> {result.name}</p>
           <p><strong>Постижение:</strong> {result.course}</p>
-          
           <p><strong>Дата на издаване:</strong> {result.date.includes('-') ? result.date.split('-').reverse().join('.') : result.date}</p>
-          
           <p><strong>Статус:</strong> {result.isValid ? "Активен" : "Невалиден / Оттеглен"}</p>
 
           <hr style={{ margin: '15px 0' }} />
-          
+
           {result.isValid && (
             <div style={{ display: 'flex', gap: '10px', flexDirection: 'column' }}>
               <button 
