@@ -3,7 +3,6 @@ import './App.css';
 import Header from './components/Header';
 import IssueForm from './components/IssueForm';
 import VerifyForm from './components/VerifyForm';
-// 1. Импортираме новия компонент
 import RecentCertificates from './components/RecentCertificates'; 
 import { getContract } from './utils/ethersHelper';
 
@@ -115,10 +114,8 @@ function App() {
       <div className="main-card">
         {view === 'verify' ? (
           <>
-            {/* Показваме формата за проверка */}
             <VerifyForm />
             
-            {/* 2. Показваме последните сертификати под формата */}
             <RecentCertificates />
           </>
         ) : (
