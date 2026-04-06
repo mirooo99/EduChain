@@ -10,18 +10,14 @@ function RecentCertificates() {
       try {
         const contract = await getContract();
         
-        // 1. Дефинираме филтър за събитието (името трябва да е точно както е в Solidity)
         const filter = contract.filters.CertificateIssued();
         
-        // 2. Взимаме събитията (например от последните 5000 блока или от началото)
-        // 'latest' е текущият блок, -5000 означава 5000 блока назад
         const events = await contract.queryFilter(filter, -10000, 'latest');
 
-        // 3. Обработваме данните и взимаме последните 5
         const parsedEvents = events.reverse().slice(0, 5).map(event => ({
-          certId: event.args[0], // bytes32 хешът
-          name: event.args[1],   // Името на ученика
-          course: event.args[2], // Курсът
+          certId: event.args[0],
+          name: event.args[1],
+          course: event.args[2],
           txHash: event.transactionHash
         }));
 
@@ -41,7 +37,7 @@ function RecentCertificates() {
   return (
     <div style={{ marginTop: '30px', padding: '15px', borderTop: '1px solid #eee' }}>
       <h3 style={{ fontSize: '1.2rem', color: '#102a43', marginBottom: '15px' }}>
-        📜 Последно издадени сертификати
+        Последно издадени сертификати
       </h3>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
         {recent.map((cert, index) => (
@@ -58,7 +54,7 @@ function RecentCertificates() {
               href={`/?hash=${cert.certId}`} 
               style={{ fontSize: '0.75rem', color: '#0052cc', textDecoration: 'none' }}
             >
-              Провери сертификат →
+              Провери сертификат
             </a>
           </div>
         ))}
