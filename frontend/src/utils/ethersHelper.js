@@ -6,22 +6,21 @@ const SEPOLIA_RPC_URL = "https://ethereum-sepolia-rpc.publicnode.com";
 
 export const getContract = async () => {
   if (window.ethereum) {
-    const browserProvider = new ethers.BrowserProvider(window.ethereum);
-    
     try {
-      const accounts = await browserProvider.listAccounts();
+      const browserProvider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await browserProvider.getSigner().catch(() => null);
       
-      if (accounts.length > 0) {
-        const signer = await browserProvider.getSigner();
-        console.log("Админ режим: Договорът е свързан с портфейл.");
+      if (signer) {
+        console.log("Админ режим: Договорът е свързан със Signer.");
         return new ethers.Contract(CONTRACT_ADDRESS, abiData.abi, signer);
+      } else {
+        console.log("Режим четене през BrowserProvider.");
+        return new ethers.Contract(CONTRACT_ADDRESS, abiData.abi, browserProvider);
       }
     } catch (e) {
-      console.error("Грешка при взимане на Signer:", e);
+      console.error("Грешка при инициализация на BrowserProvider:", e);
     }
-
-    return new ethers.Contract(CONTRACT_ADDRESS, abiData.abi, browserProvider);
-  } 
+  }
 
   console.log("Режим четене: Използва се публичен RPC.");
   const publicProvider = new ethers.JsonRpcProvider(SEPOLIA_RPC_URL);
@@ -30,8 +29,12 @@ export const getContract = async () => {
 
 export const connectWallet = async () => {
   if (window.ethereum) {
-    await window.ethereum.request({ method: 'eth_requestAccounts' });
-    window.location.reload();
+    try {
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
+      window.location.reload();
+    } catch (error) {
+      console.error("Потребителят отказа връзка:", error);
+    }
   } else {
     alert("Моля, инсталирайте MetaMask!");
   }
