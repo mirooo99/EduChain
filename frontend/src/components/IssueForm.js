@@ -203,7 +203,7 @@ function IssueForm() {
 
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <div style={{ border: '4px solid #102a43', padding: '5px', backgroundColor: '#fff' }}>
-                      <QRCodeSVG value={certHash} size={100} level="H" />
+                      <QRCodeSVG value={`https://educhain-five.vercel.app/?hash=${certId}`} size={100} level="H" />
                     </div>
                     <div style={{ textAlign: 'center', marginTop: '10px' }}>
                       <p style={{ fontSize: '12px', fontWeight: 'bold', color: '#102a43', margin: '0 0 3px 0' }}>VERIFIED ON EDUCHAIN</p>
