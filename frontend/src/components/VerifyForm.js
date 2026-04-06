@@ -21,7 +21,7 @@ function VerifyForm() {
   const handleVerify = useCallback(async (manualHash) => {
     const hashToVerify = typeof manualHash === 'string' ? manualHash : certId;
     
-    if (typeof manualHash !== 'string' && manualHash.preventDefault) {
+    if (typeof manualHash !== 'string' && manualHash && manualHash.preventDefault) {
       manualHash.preventDefault();
     }
 
@@ -56,7 +56,8 @@ function VerifyForm() {
       setCertId(hashFromUrl);
       handleVerify(hashFromUrl);
     }
-  }, [handleVerify]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); 
 
   const downloadPDF = async () => {
     if (!certificateRef.current) return;
