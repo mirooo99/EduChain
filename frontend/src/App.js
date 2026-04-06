@@ -88,28 +88,18 @@ function App() {
   return (
     <div className="container" dir="ltr">
       {/* ГОРНА ЧАСТ: Header и Wallet Button */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <div style={{ flex: 1 }}>
+      <header className="main-header">
+        <div className="header-title">
           <Header />
         </div>
         <button 
           onClick={connectWallet} 
-          className="nav-button active" 
-          style={{ 
-            background: account ? '#10b981' : '#4f46e5', 
-            marginLeft: '15px', 
-            color: 'white', 
-            border: 'none', 
-            padding: '10px 20px', 
-            borderRadius: '8px', 
-            cursor: 'pointer', 
-            fontWeight: 'bold',
-            transition: '0.3s'
-          }}
+          className="nav-button active wallet-button" 
+          style={{ background: account ? '#10b981' : '#4f46e5' }}
         >
           {account ? `${account.substring(0, 6)}...${account.substring(account.length - 4)}` : "Свържи Портфейл"}
         </button>
-      </div>
+      </header>
       
       {/* НАВИГАЦИЯ: Сменя се спрямо правата */}
       <div className="nav-container">
