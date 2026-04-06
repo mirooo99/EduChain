@@ -19,10 +19,9 @@ function VerifyForm() {
   };
 
   const handleVerify = useCallback(async (manualHash) => {
-    // Взимаме хеша или от подадения параметър (за автоматична проверка), или от стейта (за бутона)
     const hashToVerify = typeof manualHash === 'string' ? manualHash : certId;
     
-    if (typeof manualHash !== 'string' && manualHash && manualHash.preventDefault) {
+    if (typeof manualHash !== 'string' && manualHash.preventDefault) {
       manualHash.preventDefault();
     }
 
@@ -50,7 +49,7 @@ function VerifyForm() {
     }
   }, [certId]);
 
-  // Ефектът се изпълнява само веднъж при монтиране на компонента
+  // КОРЕКЦИЯ: Изпълнява се само веднъж при mount
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const hashFromUrl = urlParams.get('hash');
@@ -58,9 +57,8 @@ function VerifyForm() {
       setCertId(hashFromUrl);
       handleVerify(hashFromUrl);
     }
-    // Празен масив, за да не се презаписва при всяка промяна на полето
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, []); 
 
   const downloadPDF = async () => {
     if (!certificateRef.current) return;
@@ -190,7 +188,7 @@ function VerifyForm() {
 
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <div style={{ border: '4px solid #102a43', padding: '5px', backgroundColor: '#fff' }}>
-                      <QRCodeSVG value={`https://educhain-five.vercel.app/?hash=${certId}`} size={100} level="H" />
+                      <QRCodeSVG value={certId} size={100} level="H" />
                     </div>
                     <div style={{ textAlign: 'center', marginTop: '10px' }}>
                       <p style={{ fontSize: '12px', fontWeight: 'bold', color: '#102a43', margin: '0 0 3px 0' }}>VERIFIED ON EDUCHAIN</p>
