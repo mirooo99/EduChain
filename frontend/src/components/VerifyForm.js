@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { getContract } from '../utils/ethersHelper';
 import { QRCodeSVG } from 'qrcode.react';
 import html2canvas from 'html2canvas';
@@ -18,15 +18,22 @@ function VerifyForm() {
     return baseUrl + params;
   };
 
-  const handleVerify = async (e) => {
-    e.preventDefault();
+  const handleVerify = useCallback(async (manualHash) => {
+    const hashToVerify = typeof manualHash === 'string' ? manualHash : certId;
+    
+    if (typeof manualHash !== 'string' && manualHash.preventDefault) {
+      manualHash.preventDefault();
+    }
+
+    if (!hashToVerify) return;
+
     setError('');
     setResult(null);
     setLoading(true);
 
     try {
       const contract = await getContract();
-      const data = await contract.verifyCertificate(certId);
+      const data = await contract.verifyCertificate(hashToVerify);
       
       setResult({
         name: data[0],
@@ -40,7 +47,16 @@ function VerifyForm() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [certId]);
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const hashFromUrl = urlParams.get('hash');
+    if (hashFromUrl) {
+      setCertId(hashFromUrl);
+      handleVerify(hashFromUrl);
+    }
+  }, [handleVerify]);
 
   const downloadPDF = async () => {
     if (!certificateRef.current) return;
