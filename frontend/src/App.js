@@ -10,34 +10,17 @@ function App() {
   const [view, setView] = useState('verify');
   const [account, setAccount] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [isCorrectNetwork, setIsCorrectNetwork] = useState(true);
 
   const checkAdminStatus = useCallback(async (address) => {
     if (!address) return;
     try {
       const contract = await getContract();
-      
-      if (window.ethereum) {
-        const hexChainId = await window.ethereum.request({ method: 'eth_chainId' });
-        const currentChainId = parseInt(hexChainId, 16); 
-        const SEPOLIA_ID = 11155111;
-
-        console.log("Текуща мрежа (ID):", currentChainId);
-
-        if (currentChainId === SEPOLIA_ID) {
-          setIsCorrectNetwork(true);
-        } else {
-          setIsCorrectNetwork(false);
-        }
-      }
-
       const status = await contract.isAdmin(address); 
       console.log("Проверка на права за:", address, "| Админ:", status);
       setIsAdmin(status);
     } catch (err) {
       console.error("Грешка при проверка на статус:", err);
       setIsAdmin(false);
-      setIsCorrectNetwork(false); 
     }
   }, []);
 
@@ -72,16 +55,10 @@ function App() {
         }
       };
 
-      const handleChainChanged = () => {
-        window.location.reload();
-      };
-
       window.ethereum.on('accountsChanged', handleAccountsChanged);
-      window.ethereum.on('chainChanged', handleChainChanged);
       
       return () => {
         window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
-        window.ethereum.removeListener('chainChanged', handleChainChanged);
       };
     }
   }, [checkAdminStatus]);
@@ -106,27 +83,7 @@ function App() {
       <header className="main-header">
         <div className="header-title">
           <Header />
-          <div style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            gap: '6px', 
-            fontSize: '0.75rem', 
-            marginTop: '4px',
-            color: isCorrectNetwork ? '#10b981' : '#ef4444',
-            fontWeight: '600'
-          }}>
-            <span style={{ 
-              width: '8px', 
-              height: '8px', 
-              borderRadius: '50%', 
-              backgroundColor: isCorrectNetwork ? '#10b981' : '#ef4444',
-              display: 'inline-block',
-              boxShadow: isCorrectNetwork ? '0 0 5px #10b981' : '0 0 5px #ef4444'
-            }}></span>
-            {isCorrectNetwork ? "Sepolia Network Active" : "Wrong Network (Switch to Sepolia)"}
-          </div>
         </div>
-        
         <button 
           onClick={connectWallet} 
           className="nav-button active wallet-button" 
@@ -158,10 +115,11 @@ function App() {
         {view === 'verify' ? (
           <>
             <VerifyForm />
+            
             <RecentCertificates />
           </>
         ) : (
-          isAdmin ? <IssueForm /> : <div style={{textAlign: 'center', padding: '20px'}}>Нямате достъп.</div>
+          isAdmin ? <IssueForm /> : <div style={{textAlign: 'center'}}>Нямате достъп.</div>
         )}
       </div>
     </div>
