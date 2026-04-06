@@ -3,12 +3,15 @@ import './App.css';
 import Header from './components/Header';
 import IssueForm from './components/IssueForm';
 import VerifyForm from './components/VerifyForm';
+// 1. Импортираме новия компонент
+import RecentCertificates from './components/RecentCertificates'; 
 import { getContract } from './utils/ethersHelper';
 
 function App() {
   const [view, setView] = useState('verify');
   const [account, setAccount] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
+
   const checkAdminStatus = useCallback(async (address) => {
     if (!address) return;
     try {
@@ -111,7 +114,13 @@ function App() {
 
       <div className="main-card">
         {view === 'verify' ? (
-          <VerifyForm />
+          <>
+            {/* Показваме формата за проверка */}
+            <VerifyForm />
+            
+            {/* 2. Показваме последните сертификати под формата */}
+            <RecentCertificates />
+          </>
         ) : (
           isAdmin ? <IssueForm /> : <div style={{textAlign: 'center'}}>Нямате достъп.</div>
         )}
