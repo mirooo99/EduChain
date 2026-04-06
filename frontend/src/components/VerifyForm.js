@@ -56,7 +56,6 @@ function VerifyForm() {
       setCertId(hashFromUrl);
       verifyHash(hashFromUrl);
 
-      // 👉 маха hash от URL
       window.history.replaceState({}, document.title, window.location.pathname);
     }
   }, [verifyHash]);
@@ -129,10 +128,9 @@ function VerifyForm() {
           <p><strong>Дата на издаване:</strong> {result.date.includes('-') ? result.date.split('-').reverse().join('.') : result.date}</p>
           <p><strong>Статус:</strong> {result.isValid ? "Активен" : "Невалиден / Оттеглен"}</p>
 
-          <hr style={{ margin: '15px 0' }} />
-
           {result.isValid && (
             <div style={{ display: 'flex', gap: '10px', flexDirection: 'column' }}>
+              <hr style={{ margin: '15px 0' }} />
               <button 
                 onClick={downloadPDF}
                 disabled={loading}
