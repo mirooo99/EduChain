@@ -18,8 +18,17 @@ function App() {
       const contract = await getContract();
       
       if (window.ethereum) {
-        const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-        setIsCorrectNetwork(chainId === '0xaa36a7' || chainId === 11155111 || chainId === '11155111');
+        const hexChainId = await window.ethereum.request({ method: 'eth_chainId' });
+        const currentChainId = parseInt(hexChainId, 16); 
+        const SEPOLIA_ID = 11155111;
+
+        console.log("Текуща мрежа (ID):", currentChainId);
+
+        if (currentChainId === SEPOLIA_ID) {
+          setIsCorrectNetwork(true);
+        } else {
+          setIsCorrectNetwork(false);
+        }
       }
 
       const status = await contract.isAdmin(address); 
@@ -28,6 +37,7 @@ function App() {
     } catch (err) {
       console.error("Грешка при проверка на статус:", err);
       setIsAdmin(false);
+      setIsCorrectNetwork(false); 
     }
   }, []);
 
@@ -113,7 +123,7 @@ function App() {
               display: 'inline-block',
               boxShadow: isCorrectNetwork ? '0 0 5px #10b981' : '0 0 5px #ef4444'
             }}></span>
-            {isCorrectNetwork ? "Sepolia Network Active" : "Switch to Sepolia Network"}
+            {isCorrectNetwork ? "Sepolia Network Active" : "Wrong Network (Switch to Sepolia)"}
           </div>
         </div>
         
@@ -151,7 +161,7 @@ function App() {
             <RecentCertificates />
           </>
         ) : (
-          isAdmin ? <IssueForm /> : <div style={{textAlign: 'center', padding: '20px'}}>Нямате администраторски права.</div>
+          isAdmin ? <IssueForm /> : <div style={{textAlign: 'center', padding: '20px'}}>Нямате достъп.</div>
         )}
       </div>
     </div>
