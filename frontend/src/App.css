@@ -1,13 +1,54 @@
+:root {
+  --bg-grad-1: rgba(255, 255, 255, 0.65);
+  --bg-grad-2: rgba(90, 103, 216, 0.10);
+  --bg-linear-1: #f4f7fb;
+  --bg-linear-2: #e6edf7;
+  --bg-linear-3: #d9e3f0;
+  --grid-color: rgba(255, 255, 255, 0.45);
+  --text-main: #24364b;
+  --card-bg: rgba(255, 255, 255, 0.78);
+  --card-border: rgba(255, 255, 255, 0.55);
+  --nav-btn-bg: rgba(255, 255, 255, 0.9);
+  --nav-btn-text: #5468d4;
+  --nav-btn-hover-bg: #ffffff;
+  --input-bg: rgba(255, 255, 255, 0.92);
+  --input-border: #dbe5f0;
+  --input-border-hover: #b8c7e0;
+  --header-border: #dddddd;
+  --link-color: #0052cc;
+}
+
+[data-theme='dark'] {
+  --bg-grad-1: rgba(30, 41, 59, 0.65);
+  --bg-grad-2: rgba(99, 102, 241, 0.15);
+  --bg-linear-1: #0f172a;
+  --bg-linear-2: #1e293b;
+  --bg-linear-3: #334155;
+  --grid-color: rgba(255, 255, 255, 0.07);
+  --text-main: #f1f5f9;
+  --card-bg: rgba(30, 41, 59, 0.78);
+  --card-border: rgba(255, 255, 255, 0.1);
+  --nav-btn-bg: rgba(30, 41, 59, 0.9);
+  --nav-btn-text: #818cf8;
+  --nav-btn-hover-bg: #334155;
+  --input-bg: rgba(15, 23, 42, 0.8);
+  --input-border: #475569;
+  --input-border-hover: #64748b;
+  --header-border: #334155;
+  --link-color: #818cf8;
+}
+
 body {
   margin: 0;
   font-family: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   background:
-    radial-gradient(circle at top left, rgba(255,255,255,0.65) 0%, transparent 28%),
-    radial-gradient(circle at bottom right, rgba(90,103,216,0.10) 0%, transparent 32%),
-    linear-gradient(135deg, #f4f7fb 0%, #e6edf7 45%, #d9e3f0 100%);
+    radial-gradient(circle at top left, var(--bg-grad-1) 0%, transparent 28%),
+    radial-gradient(circle at bottom right, var(--bg-grad-2) 0%, transparent 32%),
+    linear-gradient(135deg, var(--bg-linear-1) 0%, var(--bg-linear-2) 45%, var(--bg-linear-3) 100%);
   background-attachment: fixed;
   min-height: 100vh;
-  color: #24364b;
+  color: var(--text-main);
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
 body::before {
@@ -17,10 +58,11 @@ body::before {
   pointer-events: none;
   opacity: 0.22;
   background-image:
-    linear-gradient(rgba(255,255,255,0.45) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.45) 1px, transparent 1px);
+    linear-gradient(var(--grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
   background-size: 42px 42px;
   mask-image: linear-gradient(to bottom, rgba(0,0,0,0.55), transparent 90%);
+  transition: background-image 0.3s ease;
 }
 
 .container {
@@ -54,23 +96,23 @@ body::before {
 }
 
 .main-card {
-  background: rgba(255, 255, 255, 0.78);
+  background: var(--card-bg);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   padding: 40px;
   border-radius: 20px;
   box-shadow:
     0 18px 45px rgba(17, 24, 39, 0.10),
-    inset 0 1px 0 rgba(255,255,255,0.6);
-  border: 1px solid rgba(255,255,255,0.55);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+    inset 0 1px 0 rgba(255,255,255,0.1);
+  border: 1px solid var(--card-border);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.3s ease, border-color 0.3s ease;
 }
 
 .main-card:hover {
   transform: translateY(-2px);
   box-shadow:
     0 22px 55px rgba(17, 24, 39, 0.13),
-    inset 0 1px 0 rgba(255,255,255,0.65);
+    inset 0 1px 0 rgba(255,255,255,0.15);
 }
 
 .nav-container {
@@ -89,16 +131,16 @@ body::before {
   border: 1px solid rgba(90, 103, 216, 0.14);
   border-radius: 999px;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, color 0.2s ease;
-  background: rgba(255,255,255,0.9);
-  color: #5468d4;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease, color 0.3s ease;
+  background: var(--nav-btn-bg);
+  color: var(--nav-btn-text);
   box-shadow: 0 6px 16px rgba(17, 24, 39, 0.06);
 }
 
 .nav-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 10px 22px rgba(17, 24, 39, 0.10);
-  background: #ffffff;
+  background: var(--nav-btn-hover-bg);
 }
 
 .nav-button:active {
@@ -117,26 +159,26 @@ input[type="date"] {
   width: 100%;
   padding: 13px 15px;
   margin: 10px 0 20px 0;
-  border: 1.5px solid #dbe5f0;
+  border: 1.5px solid var(--input-border);
   border-radius: 12px;
   font-size: 1rem;
   box-sizing: border-box;
-  background: rgba(255,255,255,0.92);
-  color: #24364b;
+  background: var(--input-bg);
+  color: var(--text-main);
   outline: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, background-color 0.3s ease, color 0.3s ease;
 }
 
 input[type="text"]:hover,
 input[type="date"]:hover {
-  border-color: #b8c7e0;
+  border-color: var(--input-border-hover);
 }
 
 input[type="text"]:focus,
 input[type="date"]:focus {
   border-color: #5a67d8;
   box-shadow: 0 0 0 4px rgba(90, 103, 216, 0.12);
-  background: #ffffff;
+  background: var(--input-bg);
   transform: translateY(-1px);
 }
 
