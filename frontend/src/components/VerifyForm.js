@@ -11,12 +11,26 @@ function VerifyForm() {
   const [loading, setLoading] = useState(false);
   const certificateRef = useRef(null);
 
-  const getLinkedInLink = () => {
-    if (!result) return "#";
-    const baseUrl = "https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME";
-    const params = `&name=${encodeURIComponent(result.course)}&organizationName=${encodeURIComponent("Технологично Училище 'Електронни Системи'")}&certId=${certId}`;
-    return baseUrl + params;
-  };
+const getLinkedInLink = () => {
+  if (!result) return "#";
+
+  const baseUrl = "https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME";
+  const credentialUrl = `https://educhain-five.vercel.app/?hash=${certId}`;
+  const dateObj = new Date(result.date);
+  const year = dateObj.getFullYear();
+  const month = dateObj.getMonth() + 1;
+
+  const params = [
+    `&name=${encodeURIComponent(result.course)}`,
+    `&organizationName=${encodeURIComponent("Технологично Училище 'Електронни Системи'")}`,
+    `&certId=${encodeURIComponent(certId)}`,
+    `&certUrl=${encodeURIComponent(credentialUrl)}`,
+    `&issueYear=${year}`,
+    `&issueMonth=${month}`
+  ].join('');
+
+  return baseUrl + params;
+};
 
   const verifyHash = useCallback(async (hashToVerify) => {
     if (!hashToVerify) return;
