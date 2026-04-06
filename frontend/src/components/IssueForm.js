@@ -199,6 +199,8 @@ const getLinkedInLink = () => {
         </div>
       </section>
 
+      <br>
+          
       <section>
         <h3>Анулиране на документ</h3>
         <input type="text" placeholder="Hash ID за анулиране" value={revokeId} onChange={(e) => setRevokeId(e.target.value)} style={{width: '100%', padding: '8px', boxSizing: 'border-box'}} />
