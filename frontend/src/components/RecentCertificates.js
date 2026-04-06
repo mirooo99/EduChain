@@ -14,7 +14,7 @@ function RecentCertificates() {
         
         const events = await contract.queryFilter(filter, -10000, 'latest');
 
-        const parsedEvents = events.reverse().slice(0, 5).map(event => ({
+        const parsedEvents = events.reverse().slice(0, 50).map(event => ({
           certId: event.args[0],
           name: event.args[1],
           course: event.args[2],
