@@ -238,4 +238,9 @@ button[type="submit"]:active,
   .main-card {
     padding: 25px 15px;
   }
+
+  .main-card h2 {
+    color: #1e293b; /* по-тъмно */
+    font-weight: 700;
+  }
 }
