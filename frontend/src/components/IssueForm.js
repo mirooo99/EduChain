@@ -16,18 +16,18 @@ function IssueForm() {
   const [loading, setLoading] = useState(false);
   const certificateRef = useRef(null);
 
-  const getLinkedInLink = () => {
-    if (!result) return "#";
+const getLinkedInLink = () => {
+    if (!certHash) return "#";
     const baseUrl = "https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME";
-    const credentialUrl = `https://educhain-five.vercel.app/?hash=${certId}`;
-    const dateObj = new Date(result.date);
+    const credentialUrl = `https://educhain-five.vercel.app/?hash=${certHash}`;
+    const dateObj = date ? new Date(date) : new Date();
     const year = dateObj.getFullYear();
     const month = dateObj.getMonth() + 1;
 
     const params = [
-      `&name=${encodeURIComponent(result.course)}`,
+      `&name=${encodeURIComponent(course)}`,
       `&organizationName=${encodeURIComponent("Технологично Училище 'Електронни Системи'")}`,
-      `&certId=${encodeURIComponent(certId)}`,
+      `&certId=${encodeURIComponent(certHash)}`,
       `&certUrl=${encodeURIComponent(credentialUrl)}`,
       `&issueYear=${year}`,
       `&issueMonth=${month}`
@@ -129,6 +129,14 @@ function IssueForm() {
     }
   };
 
+  const copyHashToClipboard = () => {
+    if (certHash) {
+      navigator.clipboard.writeText(certHash);
+      setStatus('Хешът е копиран успешно!');
+      setTimeout(() => setStatus(''), 3000);
+    }
+  };
+
   return (
     <div dir="ltr" style={{ padding: '20px', backgroundColor: 'white', borderRadius: '8px', display: 'flex', flexDirection: 'column', gap: '25px' }}>
 
@@ -147,7 +155,25 @@ function IssueForm() {
           <div style={{ marginTop: '20px', padding: '15px', background: '#f8fff9', border: '2px solid #28a745', borderRadius: '5px' }}>
             <p style={{ color: '#28a745', fontWeight: 'bold', margin: '0 0 10px 0' }}>Успех!</p>
             
-            <p style={{ fontSize: '0.9rem' }}><strong>Hash ID:</strong> <code style={{ wordBreak: 'break-all' }}>{certHash}</code></p>
+            <p style={{ fontSize: '0.9rem' }}>
+  <strong>Hash ID:</strong>{' '}
+  <code 
+    onClick={copyHashToClipboard}
+    title="Кликни за копиране"
+    style={{ 
+      wordBreak: 'break-all', 
+      cursor: 'pointer', 
+      backgroundColor: 'rgba(40, 167, 69, 0.1)', 
+      padding: '4px 8px', 
+      borderRadius: '4px',
+      border: '1px dashed #28a745',
+      display: 'inline-block',
+      marginTop: '5px'
+    }}
+  >
+    {certHash}
+  </code>
+</p>
 
             <div style={{ display: 'flex', gap: '10px' }}>
               <button onClick={downloadPDF} style={{ flex: 1, padding: '10px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold' }}>
