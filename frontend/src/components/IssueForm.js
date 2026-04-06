@@ -17,8 +17,22 @@ function IssueForm() {
   const certificateRef = useRef(null);
 
   const getLinkedInLink = () => {
+    if (!result) return "#";
     const baseUrl = "https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME";
-    const params = `&name=${encodeURIComponent(course)}&organizationName=${encodeURIComponent("Технологично Училище 'Електронни Системи'")}&certId=${certHash}`;
+    const credentialUrl = `https://educhain-five.vercel.app/?hash=${certId}`;
+    const dateObj = new Date(result.date);
+    const year = dateObj.getFullYear();
+    const month = dateObj.getMonth() + 1;
+
+    const params = [
+      `&name=${encodeURIComponent(result.course)}`,
+      `&organizationName=${encodeURIComponent("Технологично Училище 'Електронни Системи'")}`,
+      `&certId=${encodeURIComponent(certId)}`,
+      `&certUrl=${encodeURIComponent(credentialUrl)}`,
+      `&issueYear=${year}`,
+      `&issueMonth=${month}`
+    ].join('');
+    
     return baseUrl + params;
   };
 
