@@ -15,16 +15,14 @@ function AdminDashboard() {
       try {
         const contract = await getContract();
         
-        // Вземаме всички събития за издадени сертификати от самото начало
         const filterIssued = contract.filters.CertificateIssued();
         const eventsIssued = await contract.queryFilter(filterIssued);
         
-        // Вземаме всички събития за анулирани
         const filterRevoked = contract.filters.CertificateRevoked();
         const eventsRevoked = await contract.queryFilter(filterRevoked);
-
         const total = eventsIssued.length;
-        const revoked = eventsRevoked.length;
+        const uniqueRevokedHashes = new Set(eventsRevoked.map(e => e.args.certId));
+        const revoked = uniqueRevokedHashes.size;
 
         setStats({
           total: total,
