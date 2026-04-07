@@ -14,21 +14,23 @@ function AdminDashboard() {
     const fetchStats = async () => {
       try {
         const contract = await getContract();
-        const totalRaw = await contract.certificateCount(); 
-        const total = Number(totalRaw);
         
-        let revoked = 0;
-        const promises = [];
-        for (let i = 1; i <= total; i++) {
-          promises.push(contract.verifyCertificate(i)); 
-        }
+        // Вземаме всички събития за издадени сертификати от самото начало
+        const filterIssued = contract.filters.CertificateIssued();
+        const eventsIssued = await contract.queryFilter(filterIssued);
+        
+        // Вземаме всички събития за анулирани
+        const filterRevoked = contract.filters.CertificateRevoked();
+        const eventsRevoked = await contract.queryFilter(filterRevoked);
 
-        const allCerts = await Promise.all(promises);
-        allCerts.forEach(cert => {
-          if (cert[3] === false) revoked++; // cert[3] е isValid
+        const total = eventsIssued.length;
+        const revoked = eventsRevoked.length;
+
+        setStats({
+          total: total,
+          revoked: revoked,
+          active: total - revoked
         });
-
-        setStats({ total, revoked, active: total - revoked });
       } catch (err) {
         console.error("Dashboard error:", err);
       } finally {
@@ -50,11 +52,11 @@ function AdminDashboard() {
     <div style={{ marginBottom: '30px', paddingBottom: '20px', borderBottom: '1px solid var(--header-border)' }}>
       <h3 style={{ marginTop: 0 }}>Анализ на мрежата</h3>
       {loading ? (
-        <p style={{fontSize: '0.9rem', opacity: 0.7}}>Зареждане на данни от блокчейна...</p>
+        <p style={{fontSize: '0.9rem', opacity: 0.7}}>Синхронизиране с блокчейн събитията...</p>
       ) : (
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '15px' }}>
           <div style={cardStyle('#4f46e5')}>
-            <div style={{ fontSize: '0.7rem', fontWeight: 'bold', opacity: 0.6 }}>ОБЩО</div>
+            <div style={{ fontSize: '0.7rem', fontWeight: 'bold', opacity: 0.6 }}>ИЗДАДЕНИ</div>
             <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{stats.total}</div>
           </div>
           <div style={cardStyle('#10b981')}>
