@@ -16,7 +16,7 @@ function IssueForm() {
   const [loading, setLoading] = useState(false);
   const certificateRef = useRef(null);
 
-const getLinkedInLink = () => {
+  const getLinkedInLink = () => {
     if (!certHash) return "#";
     const baseUrl = "https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME";
     const credentialUrl = `https://educhain-five.vercel.app/?hash=${certHash}`;
@@ -116,15 +116,34 @@ const getLinkedInLink = () => {
 
   const handleRevokeWithConfirmation = async () => {
     if (!revokeId) return;
+    
     if (window.confirm("ВНИМАНИЕ: Това действие е необратимо и ще бъде записано вечно в блокчейна! Сигурни ли сте, че искате да анулирате сертификата?")) {
       try {
-        setStatus('Анулиране...');
+        setLoading(true);
+        setStatus('Проверка на статус в блокчейна...');
         const contract = await getContract();
+        const certData = await contract.verifyCertificate(revokeId);
+        const isValid = certData[3];
+
+        if (!isValid) {
+          setStatus('Грешка: Този сертификат ВЕЧЕ е анулиран!');
+          setLoading(false);
+          return;
+        }
+
+        setStatus('Изпращане на транзакция за анулиране...');
         const tx = await contract.revokeCertificate(revokeId);
+        
+        setStatus('Транзакцията се обработва (15-20 сек.)...');
         await tx.wait();
+        
         setStatus('Сертификатът е анулиран успешно!');
+        setRevokeId('');
       } catch (error) {
-        setStatus('Грешка при анулиране.');
+        console.error(error);
+        setStatus('Грешка: Сертификатът не е намерен или транзакцията беше отказана.');
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -156,24 +175,24 @@ const getLinkedInLink = () => {
             <p style={{ color: '#28a745', fontWeight: 'bold', margin: '0 0 10px 0' }}>Успех!</p>
             
             <p style={{ fontSize: '0.9rem' }}>
-  <strong>Hash ID:</strong>{' '}
-  <code 
-    onClick={copyHashToClipboard}
-    title="Кликни за копиране"
-    style={{ 
-      wordBreak: 'break-all', 
-      cursor: 'pointer', 
-      backgroundColor: 'rgba(40, 167, 69, 0.1)', 
-      padding: '4px 8px', 
-      borderRadius: '4px',
-      border: '1px dashed #28a745',
-      display: 'inline-block',
-      marginTop: '5px'
-    }}
-  >
-    {certHash}
-  </code>
-</p>
+              <strong>Hash ID:</strong>{' '}
+              <code 
+                onClick={copyHashToClipboard}
+                title="Кликни за копиране"
+                style={{ 
+                  wordBreak: 'break-all', 
+                  cursor: 'pointer', 
+                  backgroundColor: 'rgba(40, 167, 69, 0.1)', 
+                  padding: '4px 8px', 
+                  borderRadius: '4px',
+                  border: '1px dashed #28a745',
+                  display: 'inline-block',
+                  marginTop: '5px'
+                }}
+              >
+                {certHash}
+              </code>
+            </p>
 
             <div style={{ display: 'flex', gap: '10px' }}>
               <button onClick={downloadPDF} style={{ flex: 1, padding: '10px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold' }}>
@@ -204,7 +223,9 @@ const getLinkedInLink = () => {
       <section>
         <h3>Анулиране на документ</h3>
         <input type="text" placeholder="Hash ID за анулиране" value={revokeId} onChange={(e) => setRevokeId(e.target.value)} style={{width: '100%', padding: '8px', boxSizing: 'border-box'}} />
-        <button onClick={handleRevokeWithConfirmation} style={{ width: '100%', marginTop: '10px', backgroundColor: '#dc3545', color: 'white', padding: '8px', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>Анулирай Сертификат</button>
+        <button onClick={handleRevokeWithConfirmation} disabled={loading} style={{ width: '100%', marginTop: '10px', backgroundColor: '#dc3545', color: 'white', padding: '8px', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
+          {loading ? 'Проверка...' : 'Анулирай Сертификат'}
+        </button>
       </section>
 
       {status && (
