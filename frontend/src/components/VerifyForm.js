@@ -3,36 +3,34 @@ import { getContract } from '../utils/ethersHelper';
 import { QRCodeSVG } from 'qrcode.react';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
-import { Html5QrcodeScanner } from 'html5-qrcode';
 
 function VerifyForm() {
   const [certId, setCertId] = useState('');
   const [result, setResult] = useState(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [showScanner, setShowScanner] = useState(false);
   const certificateRef = useRef(null);
 
-  const getLinkedInLink = () => {
-    if (!result) return "#";
+const getLinkedInLink = () => {
+  if (!result) return "#";
 
-    const baseUrl = "https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME";
-    const credentialUrl = `https://educhain-five.vercel.app/?hash=${certId}`;
-    const dateObj = new Date(result.date);
-    const year = dateObj.getFullYear();
-    const month = dateObj.getMonth() + 1;
+  const baseUrl = "https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME";
+  const credentialUrl = `https://educhain-five.vercel.app/?hash=${certId}`;
+  const dateObj = new Date(result.date);
+  const year = dateObj.getFullYear();
+  const month = dateObj.getMonth() + 1;
 
-    const params = [
-      `&name=${encodeURIComponent(result.course)}`,
-      `&organizationName=${encodeURIComponent("Технологично Училище 'Електронни Системи'")}`,
-      `&certId=${encodeURIComponent(certId)}`,
-      `&certUrl=${encodeURIComponent(credentialUrl)}`,
-      `&issueYear=${year}`,
-      `&issueMonth=${month}`
-    ].join('');
+  const params = [
+    `&name=${encodeURIComponent(result.course)}`,
+    `&organizationName=${encodeURIComponent("Технологично Училище 'Електронни Системи'")}`,
+    `&certId=${encodeURIComponent(certId)}`,
+    `&certUrl=${encodeURIComponent(credentialUrl)}`,
+    `&issueYear=${year}`,
+    `&issueMonth=${month}`
+  ].join('');
 
-    return baseUrl + params;
-  };
+  return baseUrl + params;
+};
 
   const verifyHash = useCallback(async (hashToVerify) => {
     if (!hashToVerify) return;
@@ -76,41 +74,6 @@ function VerifyForm() {
     }
   }, [verifyHash]);
 
-  useEffect(() => {
-    let scanner;
-    if (showScanner) {
-      scanner = new Html5QrcodeScanner('reader', {
-        fps: 10,
-        qrbox: { width: 250, height: 250 },
-      });
-
-      scanner.render((decodedText) => {
-        try {
-          const url = new URL(decodedText);
-          const hashFromUrl = url.searchParams.get("hash");
-          const finalHash = hashFromUrl || decodedText;
-          
-          setCertId(finalHash);
-          setShowScanner(false);
-          verifyHash(finalHash);
-          scanner.clear();
-        } catch (e) {
-          setCertId(decodedText);
-          setShowScanner(false);
-          verifyHash(decodedText);
-          scanner.clear();
-        }
-      }, (error) => {
-      });
-    }
-
-    return () => {
-      if (scanner) {
-        scanner.clear().catch(err => console.error(err));
-      }
-    };
-  }, [showScanner, verifyHash]);
-
   const downloadPDF = async () => {
     if (!certificateRef.current) return;
     setLoading(true);
@@ -139,54 +102,40 @@ function VerifyForm() {
   };
 
   return (
-    <div style={{ padding: '20px', backgroundColor: 'transparent', borderRadius: '8px' }}>
+    <div style={{ padding: '20px', backgroundColor: 'white', borderRadius: '8px' }}>
       <h2>Проверка на автентичност</h2>
-      <p style={{ fontSize: '0.9em', opacity: 0.8, marginBottom: '20px' }}>Въведете уникалния хеш код, за да потвърдите данните в блокчейна на Sepolia.</p>
+      <p style={{ fontSize: '0.9em', color: '#666' }}>Въведете уникалния хеш код, за да потвърдите данните в блокчейна на Sepolia.</p>
 
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column' }}>
-        <div style={{ display: 'flex', gap: '10px', marginBottom: '15px' }}>
-          <input 
-            type="text" 
-            placeholder="0x..." 
-            value={certId} 
-            onChange={(e) => setCertId(e.target.value)} 
-            required 
-            style={{ flex: 1, margin: 0 }}
-          />
-          <button 
-            type="button"
-            onClick={() => setShowScanner(!showScanner)}
-            style={{ padding: '0 20px', backgroundColor: '#6c757d', color: 'white', border: 'none', borderRadius: '12px', cursor: 'pointer', fontWeight: 'bold', transition: '0.2s' }}
-          >
-            {showScanner ? 'Затвори' : '📷 Скенер'}
-          </button>
-        </div>
-        
-        {showScanner && (
-          <div id="reader" style={{ marginBottom: '20px', borderRadius: '12px', overflow: 'hidden', border: '2px solid var(--input-border)' }}></div>
-        )}
-
+        <input 
+          type="text" 
+          placeholder="0x..." 
+          value={certId} 
+          onChange={(e) => setCertId(e.target.value)} 
+          required 
+          style={{ padding: '10px', marginBottom: '10px', borderRadius: '5px', border: '1px solid #ccc' }}
+        />
         <button 
           type="submit" 
           disabled={loading}
-          style={{ padding: '14px', backgroundColor: '#0052cc', color: 'white', border: 'none', borderRadius: '12px', cursor: 'pointer', fontWeight: 'bold' }}
+          style={{ padding: '12px', backgroundColor: '#0052cc', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold' }}
         >
           {loading ? 'Зареждане...' : 'Провери'}
         </button>
       </form>
 
-      {error && <p style={{ color: '#ef4444', marginTop: '15px', fontWeight: 'bold' }}>{error}</p>}
+      {error && <p style={{ color: 'red', marginTop: '10px' }}>{error}</p>}
 
       {result && (
         <div style={{ 
-          marginTop: '25px', padding: '20px', borderRadius: '12px',
-          border: `2px solid ${result.isValid ? '#10b981' : '#ef4444'}`, 
-          backgroundColor: result.isValid ? 'rgba(16, 185, 129, 0.05)' : 'rgba(239, 68, 68, 0.05)' 
+          marginTop: '20px', padding: '15px', borderRadius: '5px',
+          border: `2px solid ${result.isValid ? '#28a745' : '#dc3545'}`, 
+          backgroundColor: result.isValid ? '#f8fff9' : '#fff8f8' 
         }}>
           {result.isValid ? (
-            <h3 style={{ color: '#10b981', marginTop: 0 }}>✅ Валиден Сертификат!</h3>
+            <h3 style={{ color: '#28a745', marginTop: 0 }}>Валиден Сертификат!</h3>
           ) : (
-            <h3 style={{ color: '#ef4444', marginTop: 0 }}>❌ АНУЛИРАН СЕРТИФИКАТ!</h3>
+            <h3 style={{ color: '#dc3545', marginTop: 0 }}>АНУЛИРАН СЕРТИФИКАТ!</h3>
           )}
           <p><strong>Ученик:</strong> {result.name}</p>
           <p><strong>Постижение:</strong> {result.course}</p>
@@ -195,11 +144,11 @@ function VerifyForm() {
 
           {result.isValid && (
             <div style={{ display: 'flex', gap: '10px', flexDirection: 'column' }}>
-              <hr style={{ margin: '15px 0', borderColor: 'rgba(0,0,0,0.1)' }} />
+              <hr style={{ margin: '15px 0' }} />
               <button 
                 onClick={downloadPDF}
                 disabled={loading}
-                style={{ width: '100%', padding: '12px', backgroundColor: '#10b981', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', fontSize: '1rem' }}
+                style={{ width: '100%', padding: '12px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold', fontSize: '1rem' }}
               >
                 {loading ? 'Генериране...' : 'Изтегли PDF Грамота'}
               </button>
@@ -208,7 +157,7 @@ function VerifyForm() {
                 href={getLinkedInLink()} 
                 target="_blank" 
                 rel="noreferrer" 
-                style={{ width: '100%', padding: '12px', backgroundColor: '#0077b5', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', fontSize: '1rem', textAlign: 'center', textDecoration: 'none', boxSizing: 'border-box' }}
+                style={{ width: '100%', padding: '12px', backgroundColor: '#0077b5', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold', fontSize: '1rem', textAlign: 'center', textDecoration: 'none', boxSizing: 'border-box' }}
               >
                 Добави в LinkedIn Профил
               </a>
