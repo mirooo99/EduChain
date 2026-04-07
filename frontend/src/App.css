@@ -243,3 +243,27 @@ button[type="submit"]:active,
     border: 1px solid rgba(255, 255, 255, 0.125);
   }
 }
+
+#reader {
+  border: none !important;
+  background: var(--input-bg);
+}
+
+#reader__dashboard_section_csr button {
+  background-color: #5a67d8 !important;
+  color: white !important;
+  border: none !important;
+  padding: 8px 15px !important;
+  border-radius: 8px !important;
+  cursor: pointer;
+  margin: 10px 0;
+  font-family: inherit;
+}
+
+#reader__status_span {
+  color: var(--text-main) !important;
+}
+
+#reader video {
+  border-radius: 12px;
+}
