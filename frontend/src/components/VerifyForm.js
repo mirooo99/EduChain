@@ -102,7 +102,7 @@ const getLinkedInLink = () => {
   };
 
   return (
-    <div style={{ padding: '20px', backgroundColor: 'white', borderRadius: '8px' }}>
+    <div style={{ padding: '20px', borderRadius: '8px' }}>
       <h2>Проверка на автентичност</h2>
       <p style={{ fontSize: '0.9em', color: '#666' }}>Въведете уникалния хеш код, за да потвърдите данните в блокчейна на Sepolia.</p>
 
