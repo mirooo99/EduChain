@@ -14,34 +14,40 @@ function AdminDashboard() {
     const fetchStats = async () => {
       try {
         const contract = await getContract();
+        
         const filterIssued = contract.filters.CertificateIssued();
         const eventsIssued = await contract.queryFilter(filterIssued);
         
         const filterRevoked = contract.filters.CertificateRevoked();
         const eventsRevoked = await contract.queryFilter(filterRevoked);
+        
         const total = eventsIssued.length;
         const uniqueRevokedHashes = new Set(eventsRevoked.map(e => e.args.certId));
         const revoked = uniqueRevokedHashes.size;
-        let adminsCount = "Н/Д";
+
+        let adminsCount = 1;
+        
         try {
-          if (typeof contract.getAdmins === 'function') {
-            const adminsList = await contract.getAdmins();
-            adminsCount = adminsList.length;
-          } 
-          else if (contract.filters.AdminAdded) {
-            const addedEvents = await contract.queryFilter(contract.filters.AdminAdded());
-            const removedEvents = contract.filters.AdminRemoved 
-              ? await contract.queryFilter(contract.filters.AdminRemoved()) 
-              : [];
+          const addFilter = contract.filters.AdminAdded ? contract.filters.AdminAdded() : null;
+          const removeFilter = contract.filters.AdminRemoved ? contract.filters.AdminRemoved() : null;
+
+          if (addFilter) {
+            const addedEvents = await contract.queryFilter(addFilter);
+            const removedEvents = removeFilter ? await contract.queryFilter(removeFilter) : [];
+
+            const adminSet = new Set();
             
-            const activeAdmins = new Set();
-            addedEvents.forEach(e => activeAdmins.add(e.args[0]));
-            removedEvents.forEach(e => activeAdmins.delete(e.args[0]));
-            
-            adminsCount = activeAdmins.size > 0 ? activeAdmins.size : 1;
+            addedEvents.forEach(event => {
+              adminSet.add(event.args[0]);
+            });
+            removedEvents.forEach(event => {
+              adminSet.delete(event.args[0]);
+            });
+
+            adminsCount = adminSet.size > 0 ? adminSet.size : 1;
           }
-        } catch (err) {
-          console.warn("Неуспешно извличане на броя админи. Проверете дали смарт контрактът го поддържа.", err);
+        } catch (adminErr) {
+          console.error("Грешка при броене на админи:", adminErr);
         }
 
         setStats({
@@ -94,6 +100,7 @@ function AdminDashboard() {
       )}
     </div>
   );
+}
 }
 
 function App() {
