@@ -99,18 +99,42 @@ function IssueForm() {
 
   const handleRole = async (action) => {
     if (!newAdminAddr) return;
-    try {
-      setStatus('Промяна на права...');
-      const contract = await getContract();
-      let tx = (action === 'add') 
-        ? await contract.addAdmin(newAdminAddr) 
-        : await contract.removeAdmin(newAdminAddr);
+    
+    if (!newAdminAddr.startsWith('0x') || newAdminAddr.length !== 42) {
+      setStatus('Грешка: Невалиден Ethereum адрес.');
+      return;
+    }
 
-      await tx.wait();
-      setStatus('Списъкът с админи е обновен!');
+    try {
+      setStatus('Проверка на текущи права...');
+      const contract = await getContract();
+      
+      const isAlreadyAdmin = await contract.isAdmin(newAdminAddr);
+
+      if (action === 'add') {
+        if (isAlreadyAdmin) {
+          setStatus('Този адрес ВЕЧЕ е администратор.');
+          return;
+        }
+        setStatus('Добавяне на нов администратор...');
+        const tx = await contract.addAdmin(newAdminAddr);
+        await tx.wait();
+        setStatus('Администраторът е добавен успешно!');
+      } else {
+        if (!isAlreadyAdmin) {
+          setStatus('Грешка: Този адрес НЕ Е администратор и не може да бъде премахнат.');
+          return;
+        }
+        setStatus('Премахване на администраторски права...');
+        const tx = await contract.removeAdmin(newAdminAddr);
+        await tx.wait();
+        setStatus('Администраторът е премахнат успешно!');
+      }
+      
+      setNewAdminAddr('');
     } catch (error) {
       console.error(error);
-      setStatus('Грешка: Само съществуващ Админ може да добавя други.');
+      setStatus('Грешка при промяна на правата. Уверете се, че вие сте главен админ.');
     }
   };
 
