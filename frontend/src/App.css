@@ -19,23 +19,23 @@
 }
 
 [data-theme='dark'] {
-  --bg-grad-1: transparent;
-  --bg-grad-2: transparent;
-  --bg-linear-1: #000000;
-  --bg-linear-2: #000000;
-  --bg-linear-3: #000000;
-  --grid-color: rgba(255, 255, 255, 0.05);
-  --text-main: #ffffff;
-  --card-bg: #111111;
-  --card-border: #333333;
-  --nav-btn-bg: #1a1a1a;
-  --nav-btn-text: #ffffff;
-  --nav-btn-hover-bg: #222222;
-  --input-bg: #000000;
-  --input-border: #444444;
-  --input-border-hover: #5a67d8;
-  --header-border: #222222;
-  --link-color: #6366f1;
+  --bg-grad-1: rgba(30, 41, 59, 0.65);
+  --bg-grad-2: rgba(99, 102, 241, 0.15);
+  --bg-linear-1: #0f172a;
+  --bg-linear-2: #1e293b;
+  --bg-linear-3: #334155;
+  --grid-color: rgba(255, 255, 255, 0.07);
+  --text-main: #f1f5f9;
+  --card-bg: rgba(30, 41, 59, 0.78);
+  --card-border: rgba(255, 255, 255, 0.1);
+  --nav-btn-bg: rgba(30, 41, 59, 0.9);
+  --nav-btn-text: #818cf8;
+  --nav-btn-hover-bg: #334155;
+  --input-bg: rgba(15, 23, 42, 0.8);
+  --input-border: #475569;
+  --input-border-hover: #64748b;
+  --header-border: #334155;
+  --link-color: #818cf8;
 }
 
 body {
@@ -63,16 +63,6 @@ body::before {
   background-size: 42px 42px;
   mask-image: linear-gradient(to bottom, rgba(0,0,0,0.55), transparent 90%);
   transition: background-image 0.3s ease;
-}
-
-input::placeholder {
-  color: var(--text-main);
-  opacity: 0.45;
-}
-
-input::-webkit-input-placeholder {
-  color: var(--text-main);
-  opacity: 0.45;
 }
 
 .container {
@@ -112,22 +102,17 @@ input::-webkit-input-placeholder {
   padding: 40px;
   border-radius: 20px;
   box-shadow:
-    0 18px 45px rgba(17, 24, 39, 0.15),
-    inset 0 1px 0 rgba(255,255,255,0.05);
+    0 18px 45px rgba(17, 24, 39, 0.10),
+    inset 0 1px 0 rgba(255,255,255,0.1);
   border: 1px solid var(--card-border);
   transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.3s ease, border-color 0.3s ease;
-}
-
-.main-card h3 {
-  color: var(--text-main);
-  font-weight: 700;
 }
 
 .main-card:hover {
   transform: translateY(-2px);
   box-shadow:
-    0 22px 55px rgba(17, 24, 39, 0.2),
-    inset 0 1px 0 rgba(255,255,255,0.1);
+    0 22px 55px rgba(17, 24, 39, 0.13),
+    inset 0 1px 0 rgba(255,255,255,0.15);
 }
 
 .nav-container {
