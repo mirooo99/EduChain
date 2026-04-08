@@ -7,7 +7,7 @@ import RecentCertificates from './components/RecentCertificates';
 import { getContract } from './utils/ethersHelper';
 
 function AdminDashboard() {
-  const [stats, setStats] = useState({ total: 0, revoked: 0, active: 0 });
+  const [stats, setStats] = useState({ total: 0, revoked: 0, active: 0, admins: 0 });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -20,14 +20,38 @@ function AdminDashboard() {
         
         const filterRevoked = contract.filters.CertificateRevoked();
         const eventsRevoked = await contract.queryFilter(filterRevoked);
+        
         const total = eventsIssued.length;
         const uniqueRevokedHashes = new Set(eventsRevoked.map(e => e.args.certId));
         const revoked = uniqueRevokedHashes.size;
 
+        let adminsCount = 1;
+        try {
+          const filterAdmin = contract.filters.AdminStatusChanged();
+          const adminEvents = await contract.queryFilter(filterAdmin);
+          
+          const activeAdmins = new Set();
+          adminEvents.forEach(e => {
+            const adminAddr = e.args.admin;
+            const isNowAdmin = e.args.status;
+            
+            if (isNowAdmin) {
+              activeAdmins.add(adminAddr);
+            } else {
+              activeAdmins.delete(adminAddr);
+            }
+          });
+          
+          adminsCount = activeAdmins.size > 0 ? activeAdmins.size : 1;
+        } catch (adminErr) {
+          console.error("Грешка при броене на админи:", adminErr);
+        }
+
         setStats({
           total: total,
           revoked: revoked,
-          active: total - revoked
+          active: total - revoked,
+          admins: adminsCount
         });
       } catch (err) {
         console.error("Dashboard error:", err);
@@ -48,22 +72,26 @@ function AdminDashboard() {
 
   return (
     <div style={{ marginBottom: '30px', paddingBottom: '20px', borderBottom: '1px solid var(--header-border)' }}>
-      <h3 style={{ marginTop: 0 }}>Анализ на мрежата</h3>
+      <h3 style={{ marginTop: 0, color: 'var(--text-main)' }}>Анализ на мрежата</h3>
       {loading ? (
         <p style={{fontSize: '0.9rem', opacity: 0.7}}>Синхронизиране с блокчейн събитията...</p>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '15px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '15px' }}>
           <div style={cardStyle('#4f46e5')}>
-            <div style={{ fontSize: '0.7rem', fontWeight: 'bold', opacity: 0.6 }}>ИЗДАДЕНИ</div>
-            <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{stats.total}</div>
+            <div style={{ fontSize: '0.7rem', fontWeight: 'bold', opacity: 0.6, color: 'var(--text-main)' }}>ИЗДАДЕНИ</div>
+            <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--text-main)' }}>{stats.total}</div>
           </div>
           <div style={cardStyle('#10b981')}>
-            <div style={{ fontSize: '0.7rem', fontWeight: 'bold', opacity: 0.6 }}>АКТИВНИ</div>
-            <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{stats.active}</div>
+            <div style={{ fontSize: '0.7rem', fontWeight: 'bold', opacity: 0.6, color: 'var(--text-main)' }}>АКТИВНИ</div>
+            <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--text-main)' }}>{stats.active}</div>
           </div>
           <div style={cardStyle('#ef4444')}>
-            <div style={{ fontSize: '0.7rem', fontWeight: 'bold', opacity: 0.6 }}>АНУЛИРАНИ</div>
-            <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{stats.revoked}</div>
+            <div style={{ fontSize: '0.7rem', fontWeight: 'bold', opacity: 0.6, color: 'var(--text-main)' }}>АНУЛИРАНИ</div>
+            <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--text-main)' }}>{stats.revoked}</div>
+          </div>
+          <div style={cardStyle('#f59e0b')}>
+            <div style={{ fontSize: '0.7rem', fontWeight: 'bold', opacity: 0.6, color: 'var(--text-main)' }}>АДМИНИ</div>
+            <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--text-main)' }}>{stats.admins}</div>
           </div>
         </div>
       )}
