@@ -20,34 +20,24 @@ function AdminDashboard() {
         
         const filterRevoked = contract.filters.CertificateRevoked();
         const eventsRevoked = await contract.queryFilter(filterRevoked);
-        
         const total = eventsIssued.length;
         const uniqueRevokedHashes = new Set(eventsRevoked.map(e => e.args.certId));
         const revoked = uniqueRevokedHashes.size;
 
         let adminsCount = 1;
-        
         try {
-          const addFilter = contract.filters.AdminAdded ? contract.filters.AdminAdded() : null;
-          const removeFilter = contract.filters.AdminRemoved ? contract.filters.AdminRemoved() : null;
-
-          if (addFilter) {
-            const addedEvents = await contract.queryFilter(addFilter);
-            const removedEvents = removeFilter ? await contract.queryFilter(removeFilter) : [];
-
-            const adminSet = new Set();
-            
-            addedEvents.forEach(event => {
-              adminSet.add(event.args[0]);
-            });
-            removedEvents.forEach(event => {
-              adminSet.delete(event.args[0]);
-            });
-
-            adminsCount = adminSet.size > 0 ? adminSet.size : 1;
-          }
-        } catch (adminErr) {
-          console.error("Грешка при броене на админи:", adminErr);
+          const addedEvents = await contract.queryFilter(contract.filters.AdminAdded());
+          const removedEvents = await contract.queryFilter(contract.filters.AdminRemoved());
+          
+          const activeAdmins = new Set();
+          
+          addedEvents.forEach(e => activeAdmins.add(e.args[0]));
+          
+          removedEvents.forEach(e => activeAdmins.delete(e.args[0]));
+          
+          adminsCount = activeAdmins.size > 0 ? activeAdmins.size : 1;
+        } catch (err) {
+          console.error("Грешка при броене на админи през събития:", err);
         }
 
         setStats({
@@ -100,7 +90,6 @@ function AdminDashboard() {
       )}
     </div>
   );
-}
 }
 
 function App() {
