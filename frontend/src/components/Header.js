@@ -20,6 +20,21 @@ function Header() {
       localStorage.setItem('theme', 'light');
     }
   };
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.ctrlKey && (event.key === 'y' || event.key === 'Y')) {
+        event.preventDefault();
+        setIsDark((prevIsDark) => {
+          const newStatus = !prevIsDark;
+          setDarkMode(newStatus);
+          return newStatus;
+        });
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   return (
     <header style={{ 
