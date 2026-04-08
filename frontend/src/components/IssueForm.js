@@ -134,7 +134,7 @@ function IssueForm() {
       setNewAdminAddr('');
     } catch (error) {
       console.error(error);
-      setStatus('Грешка при промяна на правата. Уверете се, че вие сте главен админ.');
+      setStatus('Грешка при промяна на правата. Уверете се, че вие сте админ.');
     }
   };
 
