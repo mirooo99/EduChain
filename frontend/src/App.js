@@ -7,14 +7,13 @@ import RecentCertificates from './components/RecentCertificates';
 import { getContract } from './utils/ethersHelper';
 
 function AdminDashboard() {
-  const [stats, setStats] = useState({ total: 0, revoked: 0, active: 0 });
+  const [stats, setStats] = useState({ total: 0, revoked: 0, active: 0, admins: 0 });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
         const contract = await getContract();
-        
         const filterIssued = contract.filters.CertificateIssued();
         const eventsIssued = await contract.queryFilter(filterIssued);
         
@@ -23,11 +22,33 @@ function AdminDashboard() {
         const total = eventsIssued.length;
         const uniqueRevokedHashes = new Set(eventsRevoked.map(e => e.args.certId));
         const revoked = uniqueRevokedHashes.size;
+        let adminsCount = "Н/Д";
+        try {
+          if (typeof contract.getAdmins === 'function') {
+            const adminsList = await contract.getAdmins();
+            adminsCount = adminsList.length;
+          } 
+          else if (contract.filters.AdminAdded) {
+            const addedEvents = await contract.queryFilter(contract.filters.AdminAdded());
+            const removedEvents = contract.filters.AdminRemoved 
+              ? await contract.queryFilter(contract.filters.AdminRemoved()) 
+              : [];
+            
+            const activeAdmins = new Set();
+            addedEvents.forEach(e => activeAdmins.add(e.args[0]));
+            removedEvents.forEach(e => activeAdmins.delete(e.args[0]));
+            
+            adminsCount = activeAdmins.size > 0 ? activeAdmins.size : 1;
+          }
+        } catch (err) {
+          console.warn("Неуспешно извличане на броя админи. Проверете дали смарт контрактът го поддържа.", err);
+        }
 
         setStats({
           total: total,
           revoked: revoked,
-          active: total - revoked
+          active: total - revoked,
+          admins: adminsCount
         });
       } catch (err) {
         console.error("Dashboard error:", err);
@@ -52,7 +73,7 @@ function AdminDashboard() {
       {loading ? (
         <p style={{fontSize: '0.9rem', opacity: 0.7}}>Синхронизиране с блокчейн събитията...</p>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '15px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '15px' }}>
           <div style={cardStyle('#4f46e5')}>
             <div style={{ fontSize: '0.7rem', fontWeight: 'bold', opacity: 0.6 }}>ИЗДАДЕНИ</div>
             <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{stats.total}</div>
@@ -64,6 +85,10 @@ function AdminDashboard() {
           <div style={cardStyle('#ef4444')}>
             <div style={{ fontSize: '0.7rem', fontWeight: 'bold', opacity: 0.6 }}>АНУЛИРАНИ</div>
             <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{stats.revoked}</div>
+          </div>
+          <div style={cardStyle('#f59e0b')}>
+            <div style={{ fontSize: '0.7rem', fontWeight: 'bold', opacity: 0.6 }}>АДМИНИ</div>
+            <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{stats.admins}</div>
           </div>
         </div>
       )}
