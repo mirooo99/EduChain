@@ -116,6 +116,36 @@ function App() {
     }
   }, []);
 
+  const connectWallet = useCallback(async () => {
+    if (window.ethereum) {
+      try {
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const userAddress = accounts[0];
+        setAccount(userAddress);
+        await checkAdminStatus(userAddress);
+      } catch (err) {
+        console.error("Грешка при свързване:", err);
+      }
+    } else {
+      alert("Моля, инсталирайте MetaMask!");
+    }
+  }, [checkAdminStatus]);
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.ctrlKey && (event.key === 'k' || event.key === 'K')) {
+        event.preventDefault();
+        connectWallet();
+      }
+
+      if (event.key === 'Escape') {
+        setView('verify');
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [connectWallet]);
+
   useEffect(() => {
     const init = async () => {
       if (window.ethereum) {
@@ -153,21 +183,6 @@ function App() {
     }
   }, [checkAdminStatus]);
 
-  const connectWallet = async () => {
-    if (window.ethereum) {
-      try {
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        const userAddress = accounts[0];
-        setAccount(userAddress);
-        await checkAdminStatus(userAddress);
-      } catch (err) {
-        console.error("Грешка при свързване:", err);
-      }
-    } else {
-      alert("Моля, инсталирайте MetaMask!");
-    }
-  };
-
   return (
     <div className="container" dir="ltr">
       <header className="main-header">
@@ -179,7 +194,7 @@ function App() {
           className="nav-button active wallet-button" 
           style={{ background: account ? '#10b981' : '#4f46e5' }}
         >
-          {account ? `${account.substring(0, 6)}...${account.substring(account.length - 4)}` : "Свържи Портфейл"}
+          {account ? `${account.substring(0, 6)}...${account.substring(account.length - 4)}` : "Свържи Портфейл (Ctrl+K)"}
         </button>
       </header>
       
@@ -188,7 +203,7 @@ function App() {
           className={`nav-button ${view === 'verify' ? 'active' : ''}`} 
           onClick={() => setView('verify')}
         >
-          Провери Сертификат
+          Провери Сертификат (Esc)
         </button>
 
         {isAdmin && (
