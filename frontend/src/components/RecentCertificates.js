@@ -36,7 +36,7 @@ function RecentCertificates() {
 
   return (
     <div style={{ marginTop: '30px', padding: '15px', borderTop: '1px solid #eee' }}>
-      <h3 style={{ fontSize: '1.2rem', color: '#102a43', marginBottom: '15px' }}>
+      <h3 style={{ fontSize: '1.2rem', marginBottom: '15px' }}>
         Последно издадени сертификати
       </h3>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
