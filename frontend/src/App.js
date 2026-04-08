@@ -194,7 +194,7 @@ function App() {
           className="nav-button active wallet-button" 
           style={{ background: account ? '#10b981' : '#4f46e5' }}
         >
-          {account ? `${account.substring(0, 6)}...${account.substring(account.length - 4)}` : "Свържи Портфейл (Ctrl+K)"}
+          {account ? `${account.substring(0, 6)}...${account.substring(account.length - 4)}` : "Свържи Портфейл"}
         </button>
       </header>
       
@@ -203,7 +203,7 @@ function App() {
           className={`nav-button ${view === 'verify' ? 'active' : ''}`} 
           onClick={() => setView('verify')}
         >
-          Провери Сертификат (Esc)
+          Провери Сертификат
         </button>
 
         {isAdmin && (
