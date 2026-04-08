@@ -137,10 +137,10 @@ const getLinkedInLink = () => {
           ) : (
             <h3 style={{ color: '#dc3545', marginTop: 0 }}>АНУЛИРАН СЕРТИФИКАТ!</h3>
           )}
-          <p><strong>Ученик:</strong> {result.name}</p>
-          <p><strong>Постижение:</strong> {result.course}</p>
-          <p><strong>Дата на издаване:</strong> {result.date.includes('-') ? result.date.split('-').reverse().join('.') : result.date}</p>
-          <p><strong>Статус:</strong> {result.isValid ? "Активен" : "Невалиден / Оттеглен"}</p>
+          <p style={{ color: '#000000' }}><strong>Ученик:</strong> {result.name}</p>
+          <p style={{ color: '#000000' }}><strong>Постижение:</strong> {result.course}</p>
+          <p style={{ color: '#000000' }}><strong>Дата на издаване:</strong> {result.date.includes('-') ? result.date.split('-').reverse().join('.') : result.date}</p>
+          <p style={{ color: '#000000' }}><strong>Статус:</strong> {result.isValid ? "Активен" : "Невалиден / Оттеглен"}</p>
 
           {result.isValid && (
             <div style={{ display: 'flex', gap: '10px', flexDirection: 'column' }}>
