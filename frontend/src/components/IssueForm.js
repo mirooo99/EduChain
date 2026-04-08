@@ -211,7 +211,8 @@ function IssueForm() {
                   borderRadius: '4px',
                   border: '1px dashed #28a745',
                   display: 'inline-block',
-                  marginTop: '5px'
+                  marginTop: '5px',
+                  color: '#000000'
                 }}
               >
                 {certHash}
@@ -253,7 +254,7 @@ function IssueForm() {
       </section>
 
       {status && (
-        <div style={{ padding: '12px', borderLeft: '4px solid #007bff', background: '#f0f7ff', fontWeight: '500', fontSize: '0.9rem' }}>
+        <div style={{ padding: '12px', borderLeft: '4px solid #007bff', background: '#f0f7ff', fontWeight: '500', fontSize: '0.9rem', color: '#000000' }}>
           {status}
         </div>
       )}
