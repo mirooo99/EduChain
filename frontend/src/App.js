@@ -130,6 +130,7 @@ function App() {
       alert("Моля, инсталирайте MetaMask!");
     }
   }, [checkAdminStatus]);
+
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.ctrlKey && (event.key === 'k' || event.key === 'K')) {
@@ -192,7 +193,11 @@ function App() {
         <button 
           onClick={connectWallet} 
           className="nav-button active wallet-button" 
-          style={{ background: account ? '#10b981' : '#4f46e5' }}
+          style={{ 
+            background: account 
+              ? (isAdmin ? '#10b981' : '#ef4444') 
+              : '#4f46e5' 
+          }}
         >
           {account ? `${account.substring(0, 6)}...${account.substring(account.length - 4)}` : "Свържи Портфейл"}
         </button>
