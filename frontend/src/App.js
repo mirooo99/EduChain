@@ -195,7 +195,7 @@ function App() {
           className="nav-button active wallet-button" 
           style={{ 
             background: account 
-              ? (isAdmin ? '#10b981' : '#ef4444') 
+              ? (isAdmin ? '#10b981' : '#29C8D6') 
               : '#4f46e5' 
           }}
         >
